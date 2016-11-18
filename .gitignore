@@ -1,3 +1,10 @@
-.gradle
-build
+# IDEA files
 .idea
+
+# Build files
+build
+
+# Gradle files
+.gradle
+
+# Developer's test files

@@ -5,6 +5,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import servlets.HelloServlet;
 
+import javax.servlet.http.HttpServlet;
+
 /**
  * Created by bbb1991 on 11/18/16.
  *
@@ -13,7 +15,7 @@ import servlets.HelloServlet;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        HelloServlet helloServlet = new HelloServlet();
+        HttpServlet helloServlet = new HelloServlet();
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(helloServlet), "/hello");

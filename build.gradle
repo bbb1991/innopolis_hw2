@@ -2,6 +2,9 @@ group 'me.bbb1991.innopolis_hw2'
 version '0.0.1'
 
 apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty' // deprecated and may be removed in Gradle 4.0
+apply from: 'https://raw.github.com/akhikhl/gretty/master/pluginScripts/gretty.plugin'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -23,6 +26,7 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.21'
     // https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-servlet
     compile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '9.3.14.v20161028'
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
 }
 
 jar {
@@ -48,4 +52,10 @@ buildscript {
     dependencies {
         classpath fileTree(dir: '../../build/libs', include: '*.jar', excludes: ['*javadoc.jar', '*sources.jar'])
     }
+}
+
+gretty {
+    // supported values:
+    // 'jetty7', 'jetty8', 'jetty9', 'tomcat7', 'tomcat8'
+    servletContainer = 'jetty9'
 }

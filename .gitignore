@@ -3,8 +3,10 @@
 
 # Build files
 build
+out
 
 # Gradle files
 .gradle
 
 # Developer's test files
+src/main/java/main/Test.java

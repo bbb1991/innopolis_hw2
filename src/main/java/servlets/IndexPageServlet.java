@@ -31,9 +31,7 @@ public class IndexPageServlet extends HttpServlet {
         if (profile != null) {
             String username = profile.getUsername();
             req.setAttribute("username", username);
-
         }
-
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 }

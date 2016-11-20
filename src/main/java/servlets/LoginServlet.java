@@ -1,8 +1,7 @@
 package servlets;
 
-import accounts.UserProfile;
 import dbService.DBService;
-import helpers.AccountServiceHelper;
+import dbService.dataSets.UserDataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +25,11 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (isUserAuthorized(req, resp)) {
-            resp.sendRedirect("/");
+        String username = (String) req.getSession().getAttribute("username");
+
+        if (username != null) { // if user already logged in
+            resp.sendRedirect(req.getContextPath());
+            return;
         }
         req.getRequestDispatcher("/login.jsp").forward(req, resp);
     }
@@ -37,41 +39,40 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-//        dbservice.
 
         logger.info("Incoming request for login. Username is: {}", username);
 
         if (username == null || password == null) {
             logger.error("Login/password field not filled in!");
+            req.setAttribute("error", "Required field not filled!");
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            req.getRequestDispatcher("/error_page.jsp").forward(req, resp);
             return;
         }
 
-        UserProfile profile = AccountServiceHelper.getInstance().getUserByLogin(username);
+        UserDataSet userDataSet = dbservice.getUser(username);
 
-        if (profile == null) {
+        // user not found.
+        // but for security reasons. we don't tell about not exists
+        if (userDataSet == null) {
             logger.error("Login/password not matched!");
+            req.setAttribute("error", "Login/password incorrect!");
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            req.getRequestDispatcher("/error_page.jsp").forward(req, resp);
             return;
         }
 
-        if (!Objects.equals(profile.getPassword(), password)) {
+        if (!Objects.equals(userDataSet.getPassword(), password)) {
             logger.info("Password incorrect!");
+            req.setAttribute("error", "Login/password incorrect!");
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            req.getRequestDispatcher("/error_page.jsp").forward(req, resp);
             return;
         }
 
         logger.info("Everything OK. Adding session to known users. Session id is: {}", req.getSession().getId());
-        AccountServiceHelper.getInstance().addSession(req.getSession().getId(), profile);
-        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        resp.sendRedirect("/");
-    }
-
-    private static boolean isUserAuthorized(HttpServletRequest request, HttpServletResponse response) {
-        String sessionId = request.getSession().getId();
-
-        UserProfile profile = AccountServiceHelper.getInstance().getUserBySessionId(sessionId);
-
-        return profile != null;
+        req.getSession().setAttribute("username", username);
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.sendRedirect(req.getContextPath());
     }
  }

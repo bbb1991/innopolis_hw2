@@ -17,6 +17,7 @@
     <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>servlets.LoginServlet</servlet-class>
+        <description>Сервлет для работы со входом пользователя в систему</description>
     </servlet>
     <servlet-mapping>
         <servlet-name>login</servlet-name>
@@ -30,5 +31,14 @@
     <servlet-mapping>
         <servlet-name>index_page</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>register_page</servlet-name>
+        <servlet-class>servlets.RegisterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>register_page</servlet-name>
+        <url-pattern>/register</url-pattern>
     </servlet-mapping>
 </web-app>

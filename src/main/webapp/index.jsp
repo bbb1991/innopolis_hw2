@@ -8,14 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Index</title>
     <script src="${pageContext.request.contextPath}/js/script.js" type="application/javascript"></script>
 </head>
 <body>
 
 <h1>It's alive!</h1>
 <%
-    String username = (String) request.getAttribute("username");
+    String username = (String) request.getSession().getAttribute("username");
     String message;
     if (username == null) {
         message = "You aren't logged in";
@@ -24,5 +24,8 @@
     }
 %>
 <p><%=message%></p>
+<form method="delete" action="${pageContext.request.contextPath}/">
+
+</form>
 </body>
 </html>

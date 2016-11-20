@@ -26,12 +26,6 @@ public class IndexPageServlet extends HttpServlet {
         String sessionId = req.getSession().getId();
         logger.info("Incoming GET request. Session ID is: {}", sessionId);
 
-        UserProfile profile = AccountServiceHelper.getInstance().getUserBySessionId(sessionId);
-
-        if (profile != null) {
-            String username = profile.getUsername();
-            req.setAttribute("username", username);
-        }
         req.getRequestDispatcher("index.jsp").forward(req, resp);
     }
 }

@@ -22,7 +22,7 @@ public class PropertyReader {
 
     private PropertyReader() {}
 
-    public static Properties readProperty(String file) {
+    public static Properties readProperty(final String file) {
         Properties properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = loader.getResourceAsStream(file)) {
@@ -34,7 +34,7 @@ public class PropertyReader {
         }
 
         for (Map.Entry property : properties.entrySet())
-            logger.info(property.getKey() + " : " + property.getValue());
+            logger.info(property.getKey() + ": " + property.getValue());
         return properties;
     }
 }

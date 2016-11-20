@@ -6,14 +6,13 @@ import helpers.PropertyReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import static helpers.Constants.ERROR_MESSAGE;
+import static helpers.Constants.SETTINGS_FILE;
 
 /**
  * Created by bbb1991 on 11/20/16.
@@ -52,9 +51,7 @@ public class DBService {
     private Connection getConnection() {
         Connection connection = null;
         try {
-//            DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
-
-            Properties properties = PropertyReader.readProperty("settings.properties");
+            Properties properties = PropertyReader.readProperty(SETTINGS_FILE);
 
             String url = properties.getProperty("db_url");
             String user = properties.getProperty("db_username");

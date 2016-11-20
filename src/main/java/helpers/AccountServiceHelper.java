@@ -11,6 +11,8 @@ import java.util.Map;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
+
+@Deprecated
 public class AccountServiceHelper {
     private final Map<String, UserProfile> loginToProfile;
     private final Map<String, UserProfile> sessionIdToProfile;

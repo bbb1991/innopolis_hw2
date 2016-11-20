@@ -10,6 +10,8 @@ public class UserDataSet {
     private long id;
     private String username;
     private String password;
+    private boolean isAdmin;
+    private boolean isBlocked;
 
     public UserDataSet(long id, String username, String password) {
         this.id = id;
@@ -33,6 +35,22 @@ public class UserDataSet {
 
     public long getId() {
         return id;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     @Override

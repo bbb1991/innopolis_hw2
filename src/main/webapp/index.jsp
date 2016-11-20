@@ -20,12 +20,12 @@
     if (username == null) {
         message = "You aren't logged in";
     } else {
-        message = "Welcome " + username;
+        message = "Welcome, " + username;
     }
 %>
 <p><%=message%></p>
-<form method="delete" action="${pageContext.request.contextPath}/">
-
+<form method="post" action="${pageContext.request.contextPath}/logout">
+<input type="submit" value="Logout">
 </form>
 </body>
 </html>

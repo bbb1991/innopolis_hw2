@@ -9,9 +9,20 @@
 <html>
 <head>
     <title>Title</title>
+    <script src="${pageContext.request.contextPath}/js/script.js" type="application/javascript"></script>
 </head>
 <body>
 
 <h1>It's alive!</h1>
+<%
+    String username = (String) request.getAttribute("username");
+    String message;
+    if (username == null) {
+        message = "You aren't logged in";
+    } else {
+        message = "Welcome " + username;
+    }
+%>
+<p><%=message%></p>
 </body>
 </html>

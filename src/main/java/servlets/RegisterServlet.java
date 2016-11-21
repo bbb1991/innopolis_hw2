@@ -18,8 +18,8 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = (String) req.getSession().getAttribute("username");
-        if (username != null) {
+        UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
+        if (userDataSet != null) { // already llogged in
             resp.sendRedirect(req.getContextPath());
         }
         req.getRequestDispatcher("/register.jsp").forward(req, resp);
@@ -45,7 +45,7 @@ public class RegisterServlet extends HttpServlet {
 
         UserDataSet userDataSet = new UserDataSet(username, password1);
         DBService.getInstance().insertUser(userDataSet);
-        req.getSession().setAttribute("username", username);
+        req.getSession().setAttribute("user", userDataSet);
         resp.sendRedirect(req.getContextPath());
     }
 }

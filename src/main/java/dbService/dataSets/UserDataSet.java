@@ -6,7 +6,7 @@ package dbService.dataSets;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-public class UserDataSet {
+public final class UserDataSet {
     private long id;
     private String username;
     private String password;

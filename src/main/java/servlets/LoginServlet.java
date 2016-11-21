@@ -25,9 +25,9 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String username = (String) req.getSession().getAttribute("username");
+        UserDataSet userDataSet = ((UserDataSet) req.getSession().getAttribute("user"));
 
-        if (username != null) { // if user already logged in
+        if (userDataSet != null) { // if user already logged in
             resp.sendRedirect(req.getContextPath());
             return;
         }
@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         logger.info("Everything OK. Adding session to known users. Session id is: {}", req.getSession().getId());
-        req.getSession().setAttribute("username", username);
+        req.getSession().setAttribute("user", userDataSet);
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.sendRedirect(req.getContextPath());
     }

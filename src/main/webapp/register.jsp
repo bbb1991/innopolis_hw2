@@ -12,6 +12,8 @@
 </head>
 <body>
 
+<h1>Register page</h1>
+
 
 <form method="post" action="${pageContext.request.contextPath}/register">
 

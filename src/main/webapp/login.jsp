@@ -11,6 +11,7 @@
     <title>Login</title>
 </head>
 <body>
+<h1>Login page</h1>
 <form method="post" action="${pageContext.request.contextPath}/login">
 
     <label for="username">Username:</label>

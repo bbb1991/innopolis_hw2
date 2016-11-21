@@ -1,3 +1,4 @@
+<%@ page import="dbService.dataSets.UserDataSet" %>
 <%--
   Created by IntelliJ IDEA.
   User: bbb1991
@@ -13,19 +14,25 @@
 </head>
 <body>
 
-<h1>It's alive!</h1>
+<h1>Index page</h1>
+<p><a href="${pageContext.request.contextPath}/login">Login</a></p>
+<p><a href="${pageContext.request.contextPath}/register">Register</a></p>
+<br>
 <%
-    String username = (String) request.getSession().getAttribute("username");
-    String message;
-    if (username == null) {
-        message = "You aren't logged in";
-    } else {
-        message = "Welcome, " + username;
-    }
+    UserDataSet userDataSet = ((UserDataSet) request.getSession().getAttribute("user"));
 %>
-<p><%=message%></p>
+
+<c:choose>
+    <c:when test="${empty user}">
+        I see! You don't have a name... well... Hello, no name
+    </c:when>
+<c:otherwise>
+    <%@ include file="info.jsp" %>
+</c:otherwise>
+</c:choose>
+
 <form method="post" action="${pageContext.request.contextPath}/logout">
-<input type="submit" value="Logout">
+    <input type="submit" value="Logout">
 </form>
 </body>
 </html>

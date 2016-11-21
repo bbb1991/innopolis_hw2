@@ -1,6 +1,7 @@
 package servlets;
 
 import accounts.UserProfile;
+import dbService.dataSets.UserDataSet;
 import helpers.AccountServiceHelper;
 
 import javax.servlet.Servlet;
@@ -22,14 +23,6 @@ public class HelloServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserProfile profile = AccountServiceHelper.getInstance().getUserBySessionId(req.getSession().getId());
-
-        if (profile == null) {
-            req.getRequestDispatcher("/").forward(req, resp);
-        } else {
-//            req.setAttribute("username");
-        }
+        resp.getWriter().println("It's alive! It's alive!");
     }
-
-//    Servlet
 }

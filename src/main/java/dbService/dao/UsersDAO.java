@@ -71,6 +71,7 @@ public class UsersDAO {
         }
     }
 
+    // todo usernames may duplicates.
     public long insertUser(final UserDataSet userDataSet) {
         logger.info("Inserting new user: {}", userDataSet);
 
@@ -86,8 +87,8 @@ public class UsersDAO {
             logger.error(ERROR_MESSAGE, e);
         }
         // TODO do something this mess
-//        return getUserIdByUsername(userDataSet.getUsername());
-        return -1;
+        return getUserIdByUsername(userDataSet.getUsername());
+//        return -1;
     }
 
     public long getUserIdByUsername(final String username) {

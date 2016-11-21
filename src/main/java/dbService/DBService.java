@@ -29,7 +29,6 @@ public class DBService {
 
     private DBService() {
         this.connection = getConnection();
-//        DataSource
         warmUp();
 
     }
@@ -44,8 +43,12 @@ public class DBService {
             logger.error(ERROR_MESSAGE, e);
         }
 
-        UserDataSet userDataSet = new UserDataSet("admin", "admin");
-        usersDAO.insertUser(userDataSet);
+        UserDataSet admin = new UserDataSet("admin", "admin");
+        admin.setAdmin(true);
+        insertUser(admin);
+
+        UserDataSet guest = new UserDataSet("guest", "guest");
+        insertUser(guest);
     }
 
     private Connection getConnection() {
@@ -56,9 +59,6 @@ public class DBService {
             String url = properties.getProperty("db_url");
             String user = properties.getProperty("db_username");
             String password = properties.getProperty("db_password");
-
-//            DataSource
-//            connection = ds.getConnection();
 
             connection =  DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
@@ -84,7 +84,9 @@ public class DBService {
         return instance;
     }
 
-    public void insertUser(UserDataSet userDataSet) {
-        usersDAO.insertUser(userDataSet);
+    public long insertUser(UserDataSet userDataSet) {
+        long id  = usersDAO.insertUser(userDataSet);
+        logger.info("User inserted. ID is: {}", id);
+        return id;
     }
 }

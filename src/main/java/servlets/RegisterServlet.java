@@ -19,8 +19,9 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
-        if (userDataSet != null) { // already llogged in
+        if (userDataSet != null) { // already logged in
             resp.sendRedirect(req.getContextPath());
+            return;
         }
         req.getRequestDispatcher("/register.jsp").forward(req, resp);
     }

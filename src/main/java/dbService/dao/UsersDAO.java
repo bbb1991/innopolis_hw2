@@ -76,10 +76,12 @@ public class UsersDAO {
         logger.info("Inserting new user: {}", userDataSet);
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "INSERT INTO users (username, password) VALUES (?, ?)")) {
+                "INSERT INTO users (username, password, is_admin, is_blocked) VALUES (?, ?, ?, ?)")) {
 
             preparedStatement.setString(1, userDataSet.getUsername());
             preparedStatement.setString(2, userDataSet.getPassword());
+            preparedStatement.setBoolean(3, userDataSet.isAdmin());
+            preparedStatement.setBoolean(4, userDataSet.isBlocked());
 
             preparedStatement.execute();
 
@@ -115,7 +117,7 @@ public class UsersDAO {
 
         UserDataSet userDataSet = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT username, password FROM users WHERE username=?")) {
+                "SELECT username, password, is_admin, is_blocked FROM users WHERE username=?")) {
 
             preparedStatement.setString(1, username);
 
@@ -125,8 +127,12 @@ public class UsersDAO {
 
                 String u = resultSet.getString("username");
                 String p = resultSet.getString("password");
+                boolean isAdmin = resultSet.getBoolean("is_admin");
+                boolean isBlocked = resultSet.getBoolean("is_blocked");
 
                 userDataSet = new UserDataSet(u, p);
+                userDataSet.setAdmin(isAdmin);
+                userDataSet.setBlocked(isBlocked);
             }
         } catch (SQLException e) {
             logger.error(ERROR_MESSAGE, e);

@@ -26,9 +26,9 @@
     <c:when test="${empty user}">
         I see! You don't have a name... well... Hello, no name
     </c:when>
-<c:otherwise>
-    <%@ include file="info.jsp" %>
-</c:otherwise>
+    <c:otherwise>
+        <%@ include file="info.jsp" %>
+    </c:otherwise>
 </c:choose>
 
 <form method="post" action="${pageContext.request.contextPath}/logout">

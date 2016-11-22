@@ -1,6 +1,8 @@
 package dbService;
 
+import dbService.dao.BooksDAO;
 import dbService.dao.UsersDAO;
+import dbService.dataSets.BookDataSet;
 import dbService.dataSets.UserDataSet;
 import helpers.PropertyReader;
 import org.slf4j.Logger;
@@ -26,19 +28,24 @@ public class DBService {
     private volatile static DBService instance;
     private static final Object obj = new Object();
     private static UsersDAO usersDAO;
+    private static BooksDAO booksDAO;
 
     private DBService() {
         this.connection = getConnection();
         warmUp();
-
     }
 
     private void warmUp() {
         usersDAO = new UsersDAO(connection);
+        booksDAO = new BooksDAO(connection);
+
 
         try {
             usersDAO.dropTable();
             usersDAO.createTable();
+
+            booksDAO.dropTable();
+            booksDAO.createTable();
         } catch (SQLException e) {
             logger.error(ERROR_MESSAGE, e);
         }
@@ -84,9 +91,27 @@ public class DBService {
         return instance;
     }
 
+    @Deprecated
     public long insertUser(UserDataSet userDataSet) {
         long id  = usersDAO.insertUser(userDataSet);
         logger.info("User inserted. ID is: {}", id);
         return id;
+    }
+
+    public String insertBook(long userId, String title, String content, String username) {
+
+        BookDataSet bookDataSet = new BookDataSet(title, userId, content);
+
+        return booksDAO.addBook(bookDataSet, username);
+    }
+
+    public UserDataSet insertUser(String username, String password) {
+        UserDataSet userDataSet = new UserDataSet(username, password);
+        usersDAO.insertUser(userDataSet);
+        return userDataSet;
+    }
+
+    public BookDataSet findBookById(String id) {
+        return booksDAO.findBookById(id);
     }
 }

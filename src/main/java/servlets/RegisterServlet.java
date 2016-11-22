@@ -44,9 +44,9 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        UserDataSet userDataSet = new UserDataSet(username, password1);
-        DBService.getInstance().insertUser(userDataSet);
+        UserDataSet userDataSet = DBService.getInstance().insertUser(username, password1);
         req.getSession().setAttribute("user", userDataSet);
+        req.getSession().setAttribute("status", String.format("User %s successfully registered.", username));
         resp.sendRedirect(req.getContextPath());
     }
 }

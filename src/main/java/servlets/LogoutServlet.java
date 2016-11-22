@@ -24,6 +24,7 @@ public class LogoutServlet extends HttpServlet {
         UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
         if (userDataSet != null) {
             req.getSession().invalidate();
+            req.getSession().setAttribute("status", String.format("User %s successfully logged out", userDataSet.getUsername()));
             logger.info("User {} logging out.", userDataSet.getUsername());
         }
 

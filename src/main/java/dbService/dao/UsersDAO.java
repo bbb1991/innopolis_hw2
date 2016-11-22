@@ -45,28 +45,28 @@ public class UsersDAO {
     }
 
     public void createTable() throws SQLException {
-        logger.info("Creating tables in db.");
+        logger.info("Creating tables users with sequences.");
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE SEQUENCE IF NOT EXISTS id_seq");
+            statement.execute("CREATE SEQUENCE IF NOT EXISTS user_id_seq");
 
             statement.execute("CREATE TABLE IF NOT EXISTS users (" +
-                    "id INTEGER NOT NULL DEFAULT nextval('id_seq'), " +
+                    "id INTEGER NOT NULL DEFAULT nextval('user_id_seq'), " +
                     "username VARCHAR(20) NOT NULL UNIQUE , " +
                     "password VARCHAR(50) NOT NULL," +
                     "is_blocked BOOLEAN DEFAULT FALSE," +
-                    "is_admin BOOLEAN DEFAULT FALSE " +
+                    "is_admin BOOLEAN DEFAULT TRUE " +
                     ")");
 
-            statement.execute("ALTER SEQUENCE id_seq OWNED BY users.id");
+            statement.execute("ALTER SEQUENCE user_id_seq OWNED BY users.id");
             logger.info("Table in db created!");
         }
     }
 
     public void dropTable() throws SQLException {
-        logger.info("Trying to drop db");
+        logger.info("Trying to drop table users");
         try (Statement statement = connection.createStatement()) {
-            statement.execute("DROP TABLE IF EXISTS users");
-            statement.execute("DROP SEQUENCE IF EXISTS id_seq");
+            statement.execute("DROP TABLE IF EXISTS users CASCADE");
+            statement.execute("DROP SEQUENCE IF EXISTS id_seq CASCADE");
             logger.info("Tables dropped!");
         }
     }
@@ -117,7 +117,7 @@ public class UsersDAO {
 
         UserDataSet userDataSet = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(
-                "SELECT username, password, is_admin, is_blocked FROM users WHERE username=?")) {
+                "SELECT id, username, password, is_admin, is_blocked FROM users WHERE username=?")) {
 
             preparedStatement.setString(1, username);
 
@@ -129,10 +129,12 @@ public class UsersDAO {
                 String p = resultSet.getString("password");
                 boolean isAdmin = resultSet.getBoolean("is_admin");
                 boolean isBlocked = resultSet.getBoolean("is_blocked");
+                long id = resultSet.getLong("id");
 
                 userDataSet = new UserDataSet(u, p);
                 userDataSet.setAdmin(isAdmin);
                 userDataSet.setBlocked(isBlocked);
+                userDataSet.setId(id);
             }
         } catch (SQLException e) {
             logger.error(ERROR_MESSAGE, e);
@@ -157,6 +159,17 @@ public class UsersDAO {
 
             preparedStatement.execute();
 
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE, e);
+        }
+    }
+
+    public void removeUser(final UserDataSet userDataSet) {
+        String username = userDataSet.getUsername();
+
+        try (PreparedStatement statement = connection.prepareStatement("delete from users where username=?")) {
+            statement.setString(1, username);
+            statement.execute();
         } catch (SQLException e) {
             logger.error(ERROR_MESSAGE, e);
         }

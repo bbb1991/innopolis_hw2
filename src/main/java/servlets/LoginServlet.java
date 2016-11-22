@@ -72,6 +72,7 @@ public class LoginServlet extends HttpServlet {
 
         logger.info("Everything OK. Adding session to known users. Session id is: {}", req.getSession().getId());
         req.getSession().setAttribute("user", userDataSet);
+        req.getSession().setAttribute("status", String.format("User %s successfully logged in system.", username));
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.sendRedirect(req.getContextPath());
     }

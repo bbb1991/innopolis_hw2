@@ -51,4 +51,22 @@
         <servlet-name>logout</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>add_book</servlet-name>
+        <servlet-class>servlets.AddBookServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>add_book</servlet-name>
+        <url-pattern>/add_book</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>view_book</servlet-name>
+        <servlet-class>servlets.ViewBookServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>view_book</servlet-name>
+        <url-pattern>/view_book</url-pattern>
+    </servlet-mapping>
 </web-app>

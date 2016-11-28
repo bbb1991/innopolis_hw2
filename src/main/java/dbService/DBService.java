@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
-import static helpers.Constants.ERROR_MESSAGE;
+import static helpers.Constants.ERROR_MESSAGE_GENERAL;
 import static helpers.Constants.SETTINGS_FILE;
 
 /**
@@ -23,63 +23,70 @@ import static helpers.Constants.SETTINGS_FILE;
  * @author bagdat.bimaganbetov@gmail.com
  */
 public class DBService {
-    private final Connection connection;
     private static final Logger logger = LoggerFactory.getLogger(DBService.class);
     private volatile static DBService instance;
     private static final Object obj = new Object();
     private static UsersDAO usersDAO;
     private static BooksDAO booksDAO;
+    private ConnectionPool connectionPool;
 
-    private DBService() {
-        this.connection = getConnection();
-        warmUp();
+
+    private DBService() throws CustomException {
+        try {
+            initConnectionPool();
+            usersDAO = new UsersDAO(this);
+            booksDAO = new BooksDAO(this);
+
+            warmUp();
+        } catch (CustomException e) {
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw e;
+        }
     }
 
-    private void warmUp() {
-        usersDAO = new UsersDAO(connection);
-        booksDAO = new BooksDAO(connection);
+    public Connection retrieveConnection() throws CustomException {
+        return connectionPool.retrieve();
+    }
 
+    public void putBackConnection(Connection connection) {
+        connectionPool.putBack(connection);
+    }
 
-        try {
-            usersDAO.dropTable();
-            usersDAO.createTable();
+    private void warmUp() throws CustomException {
+        usersDAO.dropTable();
+        usersDAO.createTable();
 
-            booksDAO.dropTable();
-            booksDAO.createTable();
-        } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
-        }
+        booksDAO.dropTable();
+        booksDAO.createTable();
 
         UserDataSet admin = new UserDataSet("admin", "admin");
         admin.setAdmin(true);
-        insertUser(admin);
+        usersDAO.insert(admin);
 
         UserDataSet guest = new UserDataSet("guest", "guest");
-        insertUser(guest);
+        usersDAO.insert(guest);
+
+        booksDAO.insert(new BookDataSet("title1", "admin", "Content1"));
+        booksDAO.insert(new BookDataSet("title2", "admin", "Content2"));
+        booksDAO.insert(new BookDataSet("title3", "admin", "Content3"));
     }
 
-    private Connection getConnection() {
-        Connection connection = null;
-        try {
-            Properties properties = PropertyReader.readProperty(SETTINGS_FILE);
+    private void initConnectionPool() throws CustomException {
+        Properties properties = PropertyReader.readProperty(SETTINGS_FILE);
 
-            String url = properties.getProperty("db_url");
-            String user = properties.getProperty("db_username");
-            String password = properties.getProperty("db_password");
+        String url = properties.getProperty("db_url");
+        String user = properties.getProperty("db_username");
+        String password = properties.getProperty("db_password");
+        int capacity = Integer.parseInt(properties.getProperty("db_conn_pool_size"));
 
-            connection =  DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
-        }
-
-        return connection;
+        connectionPool = new ConnectionPool(url, user, password, capacity);
     }
 
-    public UserDataSet getUser(final String username) {
-        return usersDAO.getUserByUsername(username);
+    public UserDataSet getUser(final String username) throws CustomException {
+        return usersDAO.getByName(username);
     }
 
-    public static DBService getInstance() {
+    public static DBService getInstance() throws CustomException {
         if (instance == null) {
             synchronized (obj) {
                 if (instance == null) {
@@ -91,27 +98,29 @@ public class DBService {
         return instance;
     }
 
-    @Deprecated
-    public long insertUser(UserDataSet userDataSet) {
-        long id  = usersDAO.insertUser(userDataSet);
-        logger.info("User inserted. ID is: {}", id);
-        return id;
+    public String insertBook(long userId, String title, String content, String username) throws CustomException {
+
+        BookDataSet bookDataSet = new BookDataSet(title, username, content);
+
+        bookDataSet.setAuthor(username);
+
+        booksDAO.insert(bookDataSet);
+
+        return String.valueOf(1);
     }
 
-    public String insertBook(long userId, String title, String content, String username) {
-
-        BookDataSet bookDataSet = new BookDataSet(title, userId, content);
-
-        return booksDAO.addBook(bookDataSet, username);
-    }
-
-    public UserDataSet insertUser(String username, String password) {
+    public UserDataSet insertUser(String username, String password) throws CustomException {
         UserDataSet userDataSet = new UserDataSet(username, password);
-        usersDAO.insertUser(userDataSet);
+        usersDAO.insert(userDataSet);
         return userDataSet;
     }
 
-    public BookDataSet findBookById(String id) {
-        return booksDAO.findBookById(id);
+    public BookDataSet findBookById(String id) throws CustomException {
+
+        return booksDAO.findBookById(Long.parseLong(id));
+    }
+
+    public List<BookDataSet> getAllBooks() throws CustomException {
+        return booksDAO.getAll();
     }
 }

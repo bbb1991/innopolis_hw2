@@ -7,24 +7,43 @@ package dbService.dataSets;
  * @author bagdat.bimaganbetov@gmail.com
  */
 public class BookDataSet {
+
+    /**
+     * ID книги в БД
+     */
     private long id;
+
+
+    /**
+     * Название книги
+     */
     private String title;
-    private long authorId;
+
+
+    /**
+     * Информация об авторе, логин
+     */
     private String author;
+
+    /**
+     * Содержание книги
+     */
     private String content;
 
-    public BookDataSet(long id, String title, long authorId, String content) {
+
+    public BookDataSet(long id, String title, String author, String content) {
         this.title = title;
-        this.authorId = authorId;
+        this.author = author;
         this.id = id;
         this.content = content;
     }
 
-    public BookDataSet(String title, long authorId, String content) {
+    public BookDataSet(String title, String author, String content) {
         this.title = title;
-        this.authorId = authorId;
+        this.author = author;
         this.content = content;
     }
+
 
     public String getTitle() {
         return title;
@@ -32,14 +51,6 @@ public class BookDataSet {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(long authorId) {
-        this.authorId = authorId;
     }
 
     public long getId() {
@@ -60,7 +71,7 @@ public class BookDataSet {
 
     @Override
     public String toString() {
-        return String.format("%d: '%s'", authorId, title.toUpperCase());
+        return String.format("%s: '%s'", author, title.toUpperCase());
     }
 
     public String getAuthor() {
@@ -70,4 +81,7 @@ public class BookDataSet {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+
+
 }

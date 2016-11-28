@@ -1,31 +1,51 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: bbb1991
-  Date: 11/21/16
-  Time: 1:09 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Register</title>
+    <%@include file="header.jsp"%>
 </head>
 <body>
+<%@include file="navbar.jsp"%>
 
-<h1>Register page</h1>
+<div class="container-fluid">
+    <div class="row content">
+
+        <div class="mainbox col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4">
+
+            <h3 class="text-center">Register</h3>
 
 
-<form method="post" action="${pageContext.request.contextPath}/register">
+            <form class="form-horizontal" role="form" method="post" action="${pageContext.request.contextPath}/register">
+                <input type='hidden' name='type'
+                       value='login'/>
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="username" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password1" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                </div>
 
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" placeholder="j_smith" required><br>
-    <label for="password1">Password:</label>
-    <input type="password" id="password1" name="password1" required><br>
-    <label for="password2">Password:</label>
-    <input type="password" id="password2" name="password2" required><br>
-    <input type="submit" value="Submit"/>
-
-</form>
+                <div class="form-group">
+                    <label for="password2" class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <input id="submit" name="submit" type="submit" value="Log in" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

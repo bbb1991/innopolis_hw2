@@ -6,9 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
-import static helpers.Constants.ERROR_MESSAGE;
+import static helpers.Constants.ERROR_MESSAGE_GENERAL;
 
 /**
  * Created by bbb1991 on 11/20/16.
@@ -30,7 +29,7 @@ public class PropertyReader {
         } catch (FileNotFoundException e) {
             logger.error("File {} not found!", file, e);
         } catch (IOException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
         }
 
         for (Map.Entry property : properties.entrySet())

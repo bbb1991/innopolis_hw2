@@ -1,24 +1,15 @@
 package dbService.dao;
 
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import dbService.CustomException;
+import dbService.DBService;
 import dbService.dataSets.BookDataSet;
-import helpers.PropertyReader;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Pattern;
 
-import static helpers.Constants.ERROR_MESSAGE;
-import static helpers.Constants.SETTINGS_FILE;
+import static helpers.Constants.ERROR_MESSAGE_GENERAL;
+import static helpers.Constants.ERROR_MESSAGE_STATEMENT;
 
 /**
  * Created by bbb1991 on 11/21/16.
@@ -26,79 +17,68 @@ import static helpers.Constants.SETTINGS_FILE;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-public class BooksDAO {
+public class BooksDAO extends AbstractDAO<BookDataSet> {
 
-    private static Logger logger = LoggerFactory.getLogger(BooksDAO.class);
-
-    private MongoClient client = null;
-    private MongoDatabase db;
-    private MongoCollection<Document> collection;
-    private Connection connection;
-
-    public BooksDAO(Connection connection) {
-        this.connection = connection;
-        setUp();
+    public BooksDAO(DBService dbService) {
+        super(dbService);
     }
 
-    private void setUp() {
-        Properties properties = PropertyReader.readProperty(SETTINGS_FILE);
+    @Override
+    public void update(BookDataSet bookDataSet) throws CustomException {
 
-        String host = properties.getProperty("mongo_host");
-        int port = Integer.parseInt(properties.getProperty("mongo_port"));
-        String mongo_db = properties.getProperty("mongo_db");
-        String mongoCollection = properties.getProperty("mongo_collection");
-
-        client = new MongoClient(host, port);
-        db = client.getDatabase(mongo_db);
-
-        collection = db.getCollection(mongoCollection);
     }
 
-    public String addBook(BookDataSet bookDataSet, String username) {
-        Document document = new Document("content", bookDataSet.getContent());
-        document.put("author", username);
-        System.out.println(document);
+    @Override
+    public void delete(BookDataSet bookDataSet) throws CustomException {
 
-        collection.insertOne(document);
-        ObjectId id =  (ObjectId) document.get("_id");
-        try (PreparedStatement statement = connection.prepareStatement("insert into books (mongo_id, author_id, title) values (?, ?, ?)")) {
-            statement.setString(1, id.toString());
-            statement.setLong(2, bookDataSet.getAuthorId());
-            statement.setString(3, bookDataSet.getTitle());
+    }
 
-            int i = statement.executeUpdate();
+    @Override
+    public BookDataSet getById(long id) {
+        return null;
+    }
+
+    @Override
+    public BookDataSet getByName(String name) throws CustomException {
+        return null;
+    }
+
+
+    @Override
+    public void insert(BookDataSet bookDataSet) throws CustomException {
+
+        Connection connection = dbService.retrieveConnection();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO books (content, author_id, title) VALUES (?, ?, ?)");
+        Statement statement = connection.createStatement()) {
+
+            // todo change to prepared statment
+            statement.executeQuery("SELECT id from users where username='" + bookDataSet.getAuthor() + "'");
+
+            ResultSet rs = statement.getResultSet();
+            rs.next();
+            long author_id  = rs.getLong(1);
+            rs.close();
+
+
+            preparedStatement.setString(1, bookDataSet.getContent());
+            preparedStatement.setLong(2, author_id);
+            preparedStatement.setString(3, bookDataSet.getTitle());
+
+            int i = preparedStatement.executeUpdate();
             logger.info("Book inserted. Inserted books: {}", i);
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-
-        return id.toString();
     }
 
-    public List<Document> searchBook(Map<String, String> map) {
-        logger.info("Searching book. Query is: {}", map.keySet());
-        Document query = new Document();
-        List<Document> result = new ArrayList<>();
+    @Override
+    public void createTable() throws CustomException {
+        Connection connection = dbService.retrieveConnection();
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            query.put(entry.getKey(), Pattern.compile(entry.getValue()));
-        }
-
-        for (Document document : collection.find(query)) {
-            result.add(document);
-        }
-
-        logger.info("Search completed. Found document count: {}", result.size());
-        return result;
-
-    }
-
-    public void dropCollection() {
-        logger.error("Alert! Dropping collection!");
-//        collection.drop();
-    }
-
-    public void createTable() throws SQLException {
         logger.info("Creating table books with sequence.");
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE SEQUENCE IF NOT EXISTS book_id_seq");
@@ -106,62 +86,92 @@ public class BooksDAO {
             statement.execute("CREATE TABLE IF NOT EXISTS books (" +
                     "id INTEGER NOT NULL DEFAULT nextval('book_id_seq'), " +
                     "title VARCHAR(255) NOT NULL , " +
-                    "author_id VARCHAR(60) NOT NULL," +
-                    "mongo_id VARCHAR(24)" +
+                    "author_id INTEGER NOT NULL," +
+                    "content TEXT" +
                     ")");
 
             statement.execute("ALTER SEQUENCE book_id_seq OWNED BY users.id");
             logger.info("Table in db created!");
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
     }
 
     /**
      * Удаляет всю таблицу целиком.
-     * @throws SQLException
+     *
+     * @throws CustomException
      */
-    public void dropTable() throws SQLException {
+    @Override
+    public void dropTable() throws CustomException {
+
+        Connection connection = dbService.retrieveConnection();
+
         logger.info("Trying to drop table books with sequence");
         try (Statement statement = connection.createStatement()) {
             statement.execute("DROP TABLE IF EXISTS books CASCADE");
-            statement.execute("DROP SEQUENCE IF EXISTS book_id_seq CASCADE" );
+            statement.execute("DROP SEQUENCE IF EXISTS book_id_seq CASCADE");
             logger.info("Tables dropped!");
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-        dropCollection();
     }
 
-    public BookDataSet findBookById(final String mongoId) {
+    @Override
+    public List<BookDataSet> getAll() throws CustomException {
+        Connection connection = dbService.retrieveConnection();
+        List<BookDataSet> list = new ArrayList<>();
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT b.id, b.title, u.username, b.content FROM books b join users u on b.author_id=u.id");
+            while (resultSet.next()) {
+                long id = resultSet.getLong(1);
+                String title = resultSet.getString(2);
+                String author = resultSet.getString(3);
+                String content = resultSet.getString(4);
+
+                BookDataSet bookDataSet = new BookDataSet(id, title, author, content);
+                list.add(bookDataSet);
+            }
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
+        }
+
+        return list;
+    }
+
+    public BookDataSet findBookById(long id) throws CustomException {
+
+        Connection connection = dbService.retrieveConnection();
 
         BookDataSet bookDataSet = null;
-
-        try (PreparedStatement statement = connection.prepareStatement("select * from books where mongo_id=? limit 1")) {
-            statement.setString(1, mongoId);
+        try (PreparedStatement statement = connection.prepareStatement("SELECT b.title, u.username, b.content FROM books b join users u on b.author_id=u.id WHERE b.id=? LIMIT 1")) {
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                String title = resultSet.getString("title");
-                long authorId = resultSet.getLong("author_id");
-                long id = resultSet.getLong("id");
+                String title = resultSet.getString(1);
+                String authorId = resultSet.getString(2);
+                String content = resultSet.getString(3);
 
-                bookDataSet = new BookDataSet(id, title, authorId, null);
+                bookDataSet = new BookDataSet(id, title, authorId, content);
             }
 
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-
-        if (bookDataSet == null) {
-            return null;
-        }
-
-        Document query = new Document();
-        query.put("_id", new ObjectId(mongoId));
-        Document dbObj = collection.find(query).first();
-
-        String content = (String) dbObj.get("content");
-        String authorName = (String) dbObj.get("author");
-
-        bookDataSet.setContent(content);
-        bookDataSet.setAuthor(authorName);
 
         return bookDataSet;
     }

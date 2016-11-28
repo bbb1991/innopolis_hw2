@@ -1,12 +1,16 @@
 package dbService.dao;
 
+import dbService.CustomException;
+import dbService.DBService;
 import dbService.dataSets.UserDataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.Collection;
 
-import static helpers.Constants.ERROR_MESSAGE;
+import static helpers.Constants.ERROR_MESSAGE_GENERAL;
+import static helpers.Constants.ERROR_MESSAGE_STATEMENT;
 
 /**
  * Created by bbb1991 on 11/20/16.
@@ -14,19 +18,26 @@ import static helpers.Constants.ERROR_MESSAGE;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-public class UsersDAO {
-    private Connection connection;
-    private static final Logger logger = LoggerFactory.getLogger(UsersDAO.class);
+public class UsersDAO extends AbstractDAO<UserDataSet> {
 
-    public UsersDAO(final Connection connection) {
-        this.connection = connection;
+    public UsersDAO(final DBService dbService) {
+        super(dbService);
     }
 
-    public UserDataSet getUserById(final long id) {
+    public UserDataSet getUserById(final long id) throws CustomException {
         UserDataSet userDataSet = null;
+        Connection connection;
+
+        try {
+            connection = dbService.retrieveConnection();
+        } catch (Exception e) {
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw e;
+        }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "SELECT username, password FROM users WHERE id=?")) {
+//            String.format("select * from test where id=%d", id)
 
             preparedStatement.setLong(1, id);
 
@@ -39,13 +50,26 @@ public class UsersDAO {
             }
 
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
         return userDataSet;
     }
 
-    public void createTable() throws SQLException {
+    @Override
+    public void createTable() throws CustomException {
         logger.info("Creating tables users with sequences.");
+
+        Connection connection;
+
+        try {
+            connection = dbService.retrieveConnection();
+        } catch (CustomException e) {
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw e;
+        }
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("CREATE SEQUENCE IF NOT EXISTS user_id_seq");
 
@@ -59,21 +83,50 @@ public class UsersDAO {
 
             statement.execute("ALTER SEQUENCE user_id_seq OWNED BY users.id");
             logger.info("Table in db created!");
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
     }
 
-    public void dropTable() throws SQLException {
+    @Override
+    public void dropTable() throws CustomException {
         logger.info("Trying to drop table users");
+
+        Connection connection;
+
+        try {
+            connection = dbService.retrieveConnection();
+        } catch (CustomException e) {
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw e;
+        }
+
         try (Statement statement = connection.createStatement()) {
             statement.execute("DROP TABLE IF EXISTS users CASCADE");
             statement.execute("DROP SEQUENCE IF EXISTS id_seq CASCADE");
             logger.info("Tables dropped!");
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
     }
 
+    @Override
+    public <X extends Collection<UserDataSet>> X getAll() throws CustomException {
+        return null;
+    }
+
     // todo usernames may duplicates.
-    public long insertUser(final UserDataSet userDataSet) {
+    @Override
+    public void insert(final UserDataSet userDataSet) throws CustomException {
         logger.info("Inserting new user: {}", userDataSet);
+
+        Connection connection = dbService.retrieveConnection();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(
                 "INSERT INTO users (username, password, is_admin, is_blocked) VALUES (?, ?, ?, ?)")) {
@@ -86,16 +139,24 @@ public class UsersDAO {
             preparedStatement.execute();
 
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-        // TODO do something this mess
-        return getUserIdByUsername(userDataSet.getUsername());
-//        return -1;
     }
 
-    public long getUserIdByUsername(final String username) {
+
+    @Override
+    public UserDataSet getById(long id) {
+        return null;
+    }
+
+    public long getUserIdByUsername(final String username) throws CustomException {
         logger.info("Getting user ID  by username: {}", username);
         long id = -1L;
+
+        Connection connection = dbService.retrieveConnection();
 
         try (PreparedStatement statement = connection.prepareStatement("SELECT id FROM users WHERE username=?")) {
 
@@ -106,14 +167,19 @@ public class UsersDAO {
                 id = resultSet.getLong("id");
             }
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-
         return id;
     }
 
-    public UserDataSet getUserByUsername(final String username) {
+    @Override
+    public UserDataSet getByName(final String username) throws CustomException {
         logger.info("Getting info about user by username: {}", username);
+
+        Connection connection = dbService.retrieveConnection();
 
         UserDataSet userDataSet = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(
@@ -137,13 +203,19 @@ public class UsersDAO {
                 userDataSet.setId(id);
             }
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
-
         return userDataSet;
     }
 
-    public void updateUser(final UserDataSet userDataSet) {
+    @Override
+    public void update(final UserDataSet userDataSet) throws CustomException {
+
+        Connection connection = dbService.retrieveConnection();
+
         String username = userDataSet.getUsername();
         String password = userDataSet.getPassword();
         boolean isBlocked = userDataSet.isBlocked();
@@ -160,18 +232,28 @@ public class UsersDAO {
             preparedStatement.execute();
 
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
     }
 
-    public void removeUser(final UserDataSet userDataSet) {
+    @Override
+    public void delete(final UserDataSet userDataSet) throws CustomException {
+
+        Connection connection = dbService.retrieveConnection();
+
         String username = userDataSet.getUsername();
 
         try (PreparedStatement statement = connection.prepareStatement("delete from users where username=?")) {
             statement.setString(1, username);
             statement.execute();
         } catch (SQLException e) {
-            logger.error(ERROR_MESSAGE, e);
+            logger.error(ERROR_MESSAGE_GENERAL, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        } finally {
+            dbService.putBackConnection(connection);
         }
     }
 }

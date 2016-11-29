@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Created by bbb1991 on 11/20/16.
- *
+ * Сервлет для главной страницы со списком книг
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
@@ -32,6 +32,7 @@ public class IndexPageServlet extends HttpServlet {
             req.setAttribute("books", books);
         } catch (CustomException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            logger.error("ERROR while getting a list of books", e);
             return;
         }
 

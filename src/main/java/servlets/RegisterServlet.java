@@ -3,6 +3,7 @@ package servlets;
 import dbService.CustomException;
 import dbService.DBService;
 import dbService.dataSets.UserDataSet;
+import helpers.PasswordHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 /**
  * Created by bbb1991 on 11/21/16.
- *
+ * сервлет который отвечает за регистрацию пользователя
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
@@ -45,9 +46,17 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        UserDataSet userDataSet = null;
+        String password;
         try {
-            userDataSet = DBService.getInstance().insertUser(username, password1);
+            password = PasswordHelper.getHash(password1);
+        } catch (CustomException e) { // если при работе с генерацией хэша произошла ошибка
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            return;
+        }
+
+        UserDataSet userDataSet;
+        try {
+            userDataSet = DBService.getInstance().insertUser(username, password);
         } catch (CustomException e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
             return;

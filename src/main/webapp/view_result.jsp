@@ -1,5 +1,7 @@
 <%@ page import="dbService.dataSets.BookDataSet" %>
 
+<%-- Файл для просмотра книги --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -9,30 +11,27 @@
 <body>
 
 <%@include file="navbar.jsp" %>
-<div class="content">
-    <div class="row">
-        <div class="col-lg-12">
-            <%
-                BookDataSet bookDataSet = (BookDataSet) request.getAttribute("book");
-                if (bookDataSet != null) {
-            %>
 
-            <h1><%=bookDataSet.getTitle()%>
-            </h1>
-            <p>Author: <%=bookDataSet.getAuthor()%>
-            </p>
-            <p>Content: <%=bookDataSet.getContent()%>
-            </p>
+<div class="container">
+    <%
+        BookDataSet bookDataSet = (BookDataSet) request.getAttribute("book");
+        if (bookDataSet != null) {
+    %>
 
-            <%
-            } else {
-            %>
-            <h1>No data available</h1>
-            <%
-                }
-            %>
-        </div>
-    </div>
+    <h1><%=bookDataSet.getTitle()%>
+    </h1>
+    <p>Author: <%=bookDataSet.getAuthor()%>
+    </p>
+    <p>Content: <%=bookDataSet.getContent()%>
+    </p>
+
+    <%
+    } else {
+    %>
+    <h1>No data available</h1>
+    <%
+        }
+    %>
 </div>
 </body>
 </html>

@@ -15,33 +15,26 @@ import java.io.IOException;
 
 /**
  * Created by bbb1991 on 11/22/16.
- *
+ * Сервлет для добавлени новой книги
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
 @WebServlet("/add_book")
 public class AddBookServlet extends HttpServlet {
 
+    /**
+     * Логгер
+     */
     private static final Logger logger = LoggerFactory.getLogger(AddBookServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
-//        if (userDataSet == null) {
-//            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have permission to view this page.");
-//            return;
-//        }
         req.getRequestDispatcher("add_book.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
-
-//        if (userDataSet == null) {
-//            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "You don't have permission.");
-//            return;
-//        }
 
         String title = req.getParameter("title");
         String content = req.getParameter("content");

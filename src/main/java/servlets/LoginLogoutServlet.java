@@ -3,6 +3,7 @@ package servlets;
 import dbService.CustomException;
 import dbService.DBService;
 import dbService.dataSets.UserDataSet;
+import helpers.PasswordHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
 
 /**
  * Created by bbb1991 on 11/19/16.
- *
+ * Сервлет для работы с процессом входа и входа из системы
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
@@ -24,7 +25,14 @@ import java.util.Objects;
 @WebServlet({"/login", "/logout"})
 public class LoginLogoutServlet extends HttpServlet {
 
+    /**
+     * Сервис для работы с БД и ДАО
+     */
     private final DBService dbservice;
+
+    /**
+     * Логгер
+     */
     private static final Logger logger = LoggerFactory.getLogger(LoginLogoutServlet.class);
 
     public LoginLogoutServlet() throws CustomException {
@@ -34,9 +42,9 @@ public class LoginLogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String type = req.getParameter("type");
+        String type = req.getParameter("type"); // тип запроса, на логин или выход из системы
 
-        if ("logout".equalsIgnoreCase(type)) {
+        if ("logout".equalsIgnoreCase(type)) { // если выход из системы
             req.getSession().invalidate();
             req.getSession().setAttribute("status", "User successfully logged out");
             resp.sendRedirect(req.getContextPath());
@@ -59,31 +67,37 @@ public class LoginLogoutServlet extends HttpServlet {
 
         logger.info("Incoming request for login. Username is: {}", username);
 
-        if (username == null || password == null) {
+        if (username == null || password == null) { // если поля пустые
             logger.error("Login/password field not filled in!");
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Required field not filled!");
             return;
         }
 
-        UserDataSet userDataSet = null;
-        try {
+        UserDataSet userDataSet;
+        try { // берем из БД персону по логину
             userDataSet = dbservice.getUser(username);
         } catch (CustomException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
 
-        // user not found.
-        // but for security reasons. we don't tell about not exists
+        // если не найден пользователь с данным логином
         if (userDataSet == null) {
-            logger.error("Login/password not matched!");
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Login/password incorrect!");
+            logger.error("User doesn't exist!");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "User doesn't exist!!");
             return;
         }
 
-        if (!Objects.equals(userDataSet.getPassword(), password)) {
-            logger.info("Password incorrect!");
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Login/password incorrect!");
+        try {
+            // сверяем хэши паролей
+            if (!Objects.equals(userDataSet.getPassword(), PasswordHelper.getHash(password))) { // если не совпало
+                logger.warn("Password incorrect! Username is: {}", username);
+                resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Login/password incorrect!");
+                return;
+            }
+        } catch (CustomException e) {
+            logger.error("Error while generating password hash!", e);
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             return;
         }
 

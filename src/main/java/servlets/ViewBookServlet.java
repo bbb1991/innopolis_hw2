@@ -14,7 +14,8 @@ import java.io.IOException;
 
 /**
  * Created by bbb1991 on 11/23/16.
- *
+ * Сервлет, которая обслуживает путь <code>/find_book</code>. Данные сервлет отвечает за предоставление страницу формы
+ * поиска и обработку запроса с поиском книги
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
@@ -22,30 +23,26 @@ import java.io.IOException;
 public class ViewBookServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        UserDataSet userDataSet = (UserDataSet) req.getSession().getAttribute("user");
-//        if (userDataSet == null) {
-//            resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You don't have permission. Login in first");
-//            return;
-//        }
-        req.getRequestDispatcher("/find_book.jsp").forward(req, resp);
+        req.getRequestDispatcher("/find_book.jsp").forward(req, resp); // перенаправляем на страницу с формой поиска
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // Берем параметры запроса
         String title = req.getParameter("title");
         String id = req.getParameter("id");
         String author = req.getParameter("author");
 
-        if (title == null && author == null && id == null) {
+        if (title == null && author == null && id == null) { // проверяем на то, что хоть один из них был заполнен
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Required fields not filled");
             return;
         }
 
-        if (id != null) {
-            BookDataSet bookDataSet = null;
+        if (id != null) { // ищем по ID
+            BookDataSet bookDataSet;
             try {
                 bookDataSet = DBService.getInstance().findBookById(id);
-            } catch (CustomException e) {
+            } catch (CustomException e) { // если случился ошибка с работой в БД
                 resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
                 return;
             }

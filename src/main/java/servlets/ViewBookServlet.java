@@ -19,7 +19,7 @@ import java.io.IOException;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-@WebServlet({"/find_book"})
+//@WebServlet({"/find_book"})
 public class ViewBookServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

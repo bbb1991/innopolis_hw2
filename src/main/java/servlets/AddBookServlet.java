@@ -19,7 +19,7 @@ import java.io.IOException;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-@WebServlet("/add_book")
+//@WebServlet("/add_book")
 public class AddBookServlet extends HttpServlet {
 
     /**

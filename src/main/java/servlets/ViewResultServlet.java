@@ -22,7 +22,7 @@ import static helpers.Constants.ERROR_MESSAGE_GENERAL;
  * @author bagdat.bimaganbetov@gmail.com
  */
 
-@WebServlet("/view_result")
+//@WebServlet("/view_result")
 public class ViewResultServlet extends HttpServlet {
 
     /**

@@ -14,11 +14,11 @@ import java.io.IOException;
  * @author bagdat.bimaganbetov@gmail.com
  */
 
-@WebFilter({
-        "/add_book",    // добавление новой книги
-        "/find_book",   // поиск книги
-        "/view_result"  // просмотр результата
-})
+//@WebFilter({
+//        "/add_book",    // добавление новой книги
+//        "/find_book",   // поиск книги
+//        "/view_result"  // просмотр результата
+//})
 public class FilterServlet implements Filter {
 
     private FilterConfig filterConfig;

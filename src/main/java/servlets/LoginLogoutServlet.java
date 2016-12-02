@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,7 @@ import java.util.Objects;
  * @author bagdat.bimaganbetov@gmail.com
  */
 
-@WebServlet({"/login", "/logout"})
+//@WebServlet({"/login", "/logout"})
 public class LoginLogoutServlet extends HttpServlet {
 
     /**
@@ -90,7 +89,7 @@ public class LoginLogoutServlet extends HttpServlet {
 
         try {
             // сверяем хэши паролей
-            if (!Objects.equals(userDataSet.getPassword(), PasswordHelper.getHash(password))) { // если не совпало
+            if (!Objects.equals(userDataSet.getPasswordHash(), PasswordHelper.getHash(password))) { // если не совпало
                 logger.warn("Password incorrect! Username is: {}", username);
                 resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Login/password incorrect!");
                 return;

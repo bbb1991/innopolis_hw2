@@ -4,11 +4,13 @@ import dbService.dao.BooksDAO;
 import dbService.dao.UsersDAO;
 import dbService.dataSets.BookDataSet;
 import dbService.dataSets.UserDataSet;
+import helpers.PasswordHelper;
 import helpers.PropertyReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -103,11 +105,11 @@ public class DBService {
         booksDAO.createTable();
 
         // заполняем их тестовыми данными
-        UserDataSet admin = new UserDataSet("admin", "admin");
+        UserDataSet admin = new UserDataSet("admin", PasswordHelper.getHash("admin"));
         admin.setAdmin(true);
         usersDAO.insert(admin);
 
-        UserDataSet guest = new UserDataSet("guest", "guest");
+        UserDataSet guest = new UserDataSet("guest", PasswordHelper.getHash("guest"));
         usersDAO.insert(guest);
 
         booksDAO.insert(new BookDataSet("title1", "admin", "Content1"));
@@ -180,7 +182,8 @@ public class DBService {
      * @throws CustomException ошибка при работе с БД
      */
     public UserDataSet insertUser(String username, String password) throws CustomException {
-        UserDataSet userDataSet = new UserDataSet(username, password);
+        String passwordHash = PasswordHelper.getHash(password);
+        UserDataSet userDataSet = new UserDataSet(username, passwordHash);
         usersDAO.insert(userDataSet);
         return userDataSet;
     }
@@ -202,5 +205,13 @@ public class DBService {
      */
     public List<BookDataSet> getAllBooks() throws CustomException {
         return booksDAO.getAll();
+    }
+
+    public List<BookDataSet> getBookByTitle(String title) throws CustomException {
+        return booksDAO.getByTitle(title);
+    }
+
+    public BookDataSet findBookById(int id) throws CustomException {
+        return booksDAO.getById(id);
     }
 }

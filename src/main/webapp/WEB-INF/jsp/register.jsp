@@ -4,11 +4,10 @@
 
 <html>
 <head>
-    <title>Register</title>
-    <%@include file="header.jsp" %>
+    <%@include file="fragments/header.jsp" %>
 </head>
 <body>
-<%@include file="navbar.jsp" %>
+<%@include file="fragments/navbar.jsp" %>
 
 <div class="container">
 

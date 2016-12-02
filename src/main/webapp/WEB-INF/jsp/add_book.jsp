@@ -4,12 +4,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Add new Book</title>
-    <%@include file="header.jsp" %>
+    <%@include file="fragments/header.jsp" %>
 </head>
 <body>
 
-<%@include file="navbar.jsp" %>
+<%@include file="fragments/navbar.jsp" %>
 
 <div class="container">
 

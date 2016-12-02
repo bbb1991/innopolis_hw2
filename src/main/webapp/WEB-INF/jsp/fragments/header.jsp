@@ -1,3 +1,4 @@
+<title>${title} | e-library</title>
 <script src="${pageContext.request.contextPath}/js/script.js" type="application/javascript"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,3 +20,4 @@
 
 
 </style>
+

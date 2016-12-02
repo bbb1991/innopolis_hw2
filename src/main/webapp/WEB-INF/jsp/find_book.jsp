@@ -4,12 +4,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>View book</title>
-    <%@include file="header.jsp" %>
+    <%@include file="fragments/header.jsp" %>
 </head>
 <body>
 
-<%@include file="navbar.jsp" %>
+<%@include file="fragments/navbar.jsp" %>
 
 <div class="container">
 
@@ -20,18 +19,20 @@
 
         <form class="form-horizontal" role="form" method="post"
               action="${pageContext.request.contextPath}/find_book">
-            <input type='hidden' name='type'
-                   value='login'/>
+            <%--<input type='hidden' name='type'--%>
+                   <%--value='login'/>--%>
+
+                <input type="hidden" name="findBy" value="search_by_title" />
             <div class="form-group">
                 <label for="id" class="col-sm-2 control-label">ID:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="id" name="id">
+                    <input type="text" class="form-control" id="id" name="id" disabled>
                 </div>
             </div>
             <div class="form-group">
                 <label for="title" class="col-sm-2 control-label">Title</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="title" name="title" disabled>
+                    <input type="text" class="form-control" id="title" name="title" >
                 </div>
             </div>
 

@@ -21,7 +21,7 @@ public final class UserDataSet {
     /**
      * Хэш пароля в БД
      */
-    private String password;
+    private String passwordHash;
 
     /**
      * Является ли админом данный пользователь
@@ -33,15 +33,15 @@ public final class UserDataSet {
      */
     private boolean isBlocked;
 
-    public UserDataSet(long id, String username, String password) {
+    public UserDataSet(long id, String username, String passwordHash) {
         this.id = id;
         this.username = username;
-        this.password = password;
+        this.passwordHash = passwordHash;
     }
 
-    public UserDataSet(String username, String password) {
+    public UserDataSet(String username, String passwordHash) {
         this.username = username;
-        this.password = password;
+        this.passwordHash = passwordHash;
     }
 
     public void setId(long id) {
@@ -52,8 +52,8 @@ public final class UserDataSet {
         return username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
     public long getId() {

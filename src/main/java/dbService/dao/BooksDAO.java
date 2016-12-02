@@ -216,4 +216,37 @@ public class BooksDAO extends AbstractDAO<BookDataSet> {
         }
         return bookDataSet;
     }
+
+    /**
+     * Получение списка книг по названию
+     * @param query текст, которую должен содержать название
+     * @return список книг илюо пустой список
+     * @throws CustomException ошиюка при работе с БД
+     */
+    public List<BookDataSet> getByTitle(String query) throws CustomException {
+        Connection connection = dbService.retrieveConnection();
+
+        List<BookDataSet> books = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement("select * from books where title LIKE ?")) {
+            statement.setString(1, "%" + query + "%");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author_id");
+                Long id = resultSet.getLong("id");
+                String content = resultSet.getString("content");
+
+                books.add(new BookDataSet(id, title, author, content));
+            }
+        } catch (SQLException e) {
+            logger.error(ERROR_MESSAGE_STATEMENT, e);
+            throw new CustomException(ERROR_MESSAGE_STATEMENT, e);
+        }
+
+        return books;
+
+    }
 }

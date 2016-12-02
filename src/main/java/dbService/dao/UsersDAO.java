@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.Collection;
 import java.util.List;
 
 import static helpers.Constants.ERROR_MESSAGE_GENERAL;
@@ -177,7 +176,7 @@ public class UsersDAO extends AbstractDAO<UserDataSet> {
             }
 
             addUserStatement.setString(1, model.getUsername());
-            addUserStatement.setString(2, model.getPassword());
+            addUserStatement.setString(2, model.getPasswordHash());
             addUserStatement.setBoolean(3, model.isAdmin());
             addUserStatement.setBoolean(4, model.isBlocked());
 
@@ -283,7 +282,7 @@ public class UsersDAO extends AbstractDAO<UserDataSet> {
         Connection connection = dbService.retrieveConnection();
 
         String username = model.getUsername();
-        String password = model.getPassword();
+        String password = model.getPasswordHash();
         boolean isBlocked = model.isBlocked();
         boolean isAdmin = model.isAdmin();
 

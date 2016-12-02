@@ -20,7 +20,7 @@ import java.util.List;
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-@WebServlet("/")
+//@WebServlet("/")
 public class IndexPageServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexPageServlet.class);

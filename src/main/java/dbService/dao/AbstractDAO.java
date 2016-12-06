@@ -2,12 +2,8 @@ package dbService.dao;
 
 import dbService.CustomException;
 import dbService.DBService;
-import dbService.dataSets.BookDataSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by bbb1991 on 11/28/16.
@@ -16,15 +12,6 @@ import java.util.List;
  * @author bagdat.bimaganbetov@gmail.com
  */
 public abstract class AbstractDAO<T> {
-
-    /**
-     * БД сервис
-     */
-    protected DBService dbService;
-
-    public AbstractDAO(DBService dbService) {
-        this.dbService = dbService;
-    }
 
     /**
      * Вставка модели

@@ -1,4 +1,4 @@
-<%@ page import="dbService.dataSets.UserDataSet" %>
+<%@ page import="dbService.model.User" %>
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -19,7 +19,7 @@
 
 
                 <%
-                    UserDataSet u = (UserDataSet) request.getSession().getAttribute("user");
+                    User u = (User) request.getSession().getAttribute("user");
                     if (u == null) {
                 %>
 

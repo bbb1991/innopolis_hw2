@@ -2,7 +2,8 @@ package controllers;
 
 import dbService.CustomException;
 import dbService.DBService;
-import dbService.dataSets.BookDataSet;
+import dbService.model.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,12 +20,20 @@ import java.util.List;
 
 @Controller
 public class IndexPageController {
+
+    private DBService dbService;
+
+    @Autowired
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
+    }
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getPage(Model model) throws CustomException {
 
         if (!model.containsAttribute("books")) {
             model.addAttribute("title", "Index page");
-            List<BookDataSet> books = DBService.getInstance().getAllBooks();
+            List<Book> books = dbService.getAllBooks();
             model.addAttribute("books", books);
         }
 

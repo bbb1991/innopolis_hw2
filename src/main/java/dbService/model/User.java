@@ -1,51 +1,66 @@
-package dbService.dataSets;
+package dbService.model;
+
+import javax.persistence.*;
 
 /**
  * Created by bbb1991 on 11/20/16.
  * модель, представление пользователя в БД
+ *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
-public final class UserDataSet {
+@Entity
+@Table(name = "users")
+public class User {
 
     /**
      * ID пользователя
      */
-    private long id;
+    @Idzx
+//    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     /**
      * Логин пользователя
      */
+//    @Column(name = "username")
+    @Column
     private String username;
 
     /**
      * Хэш пароля в БД
      */
+//    @Column(name = "password")
+    @Column
     private String passwordHash;
 
     /**
      * Является ли админом данный пользователь
      */
+    @Column
+//    @Column(name = "is_admin")
     private boolean isAdmin;
 
     /**
      * Заблокирован ли данный пользователь
      */
+//    @Column(name="is_blocked")
+    @Column
     private boolean isBlocked;
 
-    public UserDataSet(long id, String username, String passwordHash) {
+    public User() {
+    }
+
+    public User(long id, String username, String passwordHash) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
     }
 
-    public UserDataSet(String username, String passwordHash) {
+    public User(String username, String passwordHash) {
         this.username = username;
         this.passwordHash = passwordHash;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -78,6 +93,26 @@ public final class UserDataSet {
 
     @Override
     public String toString() {
-        return username;
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", passwordHash='" + passwordHash + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", isBlocked=" + isBlocked +
+                '}';
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+
 }

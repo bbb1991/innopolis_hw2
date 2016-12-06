@@ -2,10 +2,11 @@ package controllers;
 
 import dbService.CustomException;
 import dbService.DBService;
-import dbService.dataSets.UserDataSet;
+import dbService.model.User;
 import helpers.PasswordHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +28,13 @@ import java.util.Objects;
  */
 @Controller
 public class LoginLogoutController {
+
+    private DBService dbService;
+
+    @Autowired
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
+    }
 
     private static final Logger logger = LoggerFactory.getLogger(LoginLogoutController.class);
 
@@ -58,15 +66,15 @@ public class LoginLogoutController {
 
         logger.info("Trying to log in. Username is: {}", username);
 
-        UserDataSet userDataSet;
+        User user;
         try {
-            userDataSet = DBService.getInstance().getUser(username); // пробуем найти пользователя по логину
+            user = dbService.getUser(username); // пробуем найти пользователя по логину
         } catch (CustomException e) {
             logger.error("Error occurred while getting user by username", e);
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
 
-        if (userDataSet == null) { // если нет такого пользвателя в БД
+        if (user == null) { // если нет такого пользвателя в БД
             logger.warn("Username not found in DB! Tried {}", username);
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Username not found!");
         }
@@ -80,7 +88,7 @@ public class LoginLogoutController {
         }
 
         // сверяем хэши паролей
-        if (!Objects.equals(passwordHash, userDataSet.getPasswordHash())) { // если не совпало
+        if (!Objects.equals(passwordHash, user.getPasswordHash())) { // если не совпало
             logger.warn("Password is incorrect!");
             throw new HttpClientErrorException(HttpStatus.UNAUTHORIZED, "Username/password incorrect!");
         }

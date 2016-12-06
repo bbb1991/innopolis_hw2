@@ -2,7 +2,8 @@ package controllers;
 
 import dbService.CustomException;
 import dbService.DBService;
-import dbService.dataSets.BookDataSet;
+import dbService.model.Book;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,12 +21,14 @@ import org.springframework.web.client.HttpServerErrorException;
 @Controller
 public class ViewBookController {
 
+    private DBService dbService;
+
     @RequestMapping("/view_result/{id}")
     public String getBook(Model model, @PathVariable("id") int id) {
 
-        BookDataSet book;
+        Book book;
         try {
-            book = DBService.getInstance().findBookById(id);
+            book = dbService.findBookById(id);
         } catch (CustomException e) {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while getting book");
         }
@@ -34,5 +37,10 @@ public class ViewBookController {
         model.addAttribute("book", book);
 
         return "view_result";
+    }
+
+    @Autowired
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 }

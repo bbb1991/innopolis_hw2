@@ -4,6 +4,7 @@ import dbService.CustomException;
 import dbService.DBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,8 @@ import java.util.Objects;
 
 @Controller
 public class RegisterUserController {
+
+    private DBService dbService;
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterUserController.class);
 
@@ -46,11 +49,16 @@ public class RegisterUserController {
         }
 
         try {
-            DBService.getInstance().insertUser(username, password1);
+            dbService.insertUser(username, password1);
         } catch (CustomException e) {
             throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while generating password hash!");
         }
 
         return "redirect:/";
+    }
+
+    @Autowired
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 }

@@ -2,9 +2,10 @@ package controllers;
 
 import dbService.CustomException;
 import dbService.DBService;
-import dbService.dataSets.BookDataSet;
+import dbService.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,8 @@ import java.util.Objects;
 @Controller
 public class SearchBookController {
 
+    private DBService dbService;
+
     private static final String SEARCH_BY_TITLE = "search_by_title";
     private static final String SEARCH_BY_AUTHOR = "search_by_author";
     private static final String SEARCH_BY_ID = "search_by_id";
@@ -49,14 +52,14 @@ public class SearchBookController {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Request type not filled!");
         }
 
-        List<BookDataSet> books = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
 
         try {
 
             switch (requestType) {
                 case SEARCH_BY_TITLE:
                     String query = request.getParameter("title");
-                    books.addAll(DBService.getInstance().getBookByTitle(query));
+                    books.addAll(dbService.getBookByTitle(query));
                     break;
                 case SEARCH_BY_AUTHOR: // TODO: 12/2/16 add logic
                     break;
@@ -77,5 +80,10 @@ public class SearchBookController {
 
         return "index";
 
+    }
+
+    @Autowired
+    public void setDbService(DBService dbService) {
+        this.dbService = dbService;
     }
 }

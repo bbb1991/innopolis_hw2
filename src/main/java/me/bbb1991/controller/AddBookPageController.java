@@ -49,7 +49,7 @@ public class AddBookPageController {
 
         Long id = dbService.saveOrUpdateBook(book);
 
-        return "redirect:/book/" + id;
+        return String.format("redirect:/book/%d", id);
     }
 
     @Autowired

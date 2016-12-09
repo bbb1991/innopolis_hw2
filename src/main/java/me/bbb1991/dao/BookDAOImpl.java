@@ -2,12 +2,14 @@ package me.bbb1991.dao;
 
 import me.bbb1991.model.Book;
 import me.bbb1991.service.DBService;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -35,7 +37,12 @@ public class BookDAOImpl implements BookDAO {
 
         EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
 
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+
         entityManager.persist(book);
+
+        transaction.commit();
 
         entityManager.close();
 

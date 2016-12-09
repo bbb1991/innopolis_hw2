@@ -3,7 +3,7 @@ package me.bbb1991.service;
 import me.bbb1991.dao.BookDAO;
 import me.bbb1991.dao.UserDAO;
 import me.bbb1991.model.Book;
-import org.hibernate.SessionFactory;
+import me.bbb1991.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -64,5 +64,18 @@ public class DBService implements InitializingBean, DisposableBean {
 
     public Book getBookById(Long id) {
         return bookDAO.getById(id);
+    }
+
+    public Long saveOrUpdateBook(Book book) {
+        if (book.getId() == null) {
+            return bookDAO.save(book);
+        }
+        bookDAO.update(book);
+
+        return book.getId();
+    }
+
+    public User getUserById(Long id) {
+        return userDAO.getById(id);
     }
 }

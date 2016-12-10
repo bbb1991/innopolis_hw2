@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <%@include file="fragment/header.jsp" %>
-</head>
+<%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
 
@@ -17,11 +15,11 @@
 
         <spring:bind path="content">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:textarea path="content"  placeholder="content" required="true"/>
+                <form:textarea path="content" placeholder="content" required="true"/>
                 <form:errors path="content"/>
             </div>
         </spring:bind>
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" >
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button class="btn btn-lg btn-success" type="submit">Submit</button>
     </form:form>
 

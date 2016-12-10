@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -37,7 +39,13 @@ public class UserDAOImpl implements UserDAO {
 
         EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
 
-        entityManager.persist(user);
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+
+        entityManager.merge(user);
+
+        transaction.commit();
+
         entityManager.close();
 
         logger.info("User saved! Info is: {}", user);
@@ -105,5 +113,24 @@ public class UserDAOImpl implements UserDAO {
         logger.info("Get user list. Size is: {}", users.size());
 
         return users;
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        logger.info("Getting user by username: {}", username);
+
+        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+
+
+        Query query = entityManager.createQuery("select u from User u where username=:username");
+        query.setParameter("username", username);
+
+        User user = (User) query.getResultList().get(0); // TODO: 12/10/16 fix this mess
+
+        entityManager.close();
+
+        logger.info("Got user: {}", user);
+
+        return user;
     }
 }

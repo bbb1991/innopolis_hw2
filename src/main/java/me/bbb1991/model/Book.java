@@ -11,6 +11,7 @@ import java.util.Date;
  * @version 1.0
  */
 @Entity
+@Table(name = "books")
 public class Book {
 
     @Id

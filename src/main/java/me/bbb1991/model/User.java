@@ -1,6 +1,7 @@
 package me.bbb1991.model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by bbb1991 on 12/8/16.
@@ -11,7 +12,7 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(name = "author")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -24,8 +25,19 @@ public class User {
     @Column
     private String password;
 
+    @Transient
+    private String confirmPassword;
+
     @Column
     private boolean blocked;
+
+    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
     public User() {
     }
@@ -60,6 +72,22 @@ public class User {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     @Override

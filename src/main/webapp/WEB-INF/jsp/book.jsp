@@ -1,8 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <%@include file="fragment/header.jsp" %>
-</head>
+<%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
     <c:if test="${not empty book}">

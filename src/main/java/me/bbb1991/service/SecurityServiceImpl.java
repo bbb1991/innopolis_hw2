@@ -11,16 +11,26 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by bbb1991 on 12/9/16.
- *
+ * Реализация интерфейса {@link SecurityService }
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
 @Service
 public class SecurityServiceImpl implements SecurityService {
+
+    /**
+     * Логгер уровня класса
+     */
     private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
+    /**
+     * Менеджер аутентификаций
+     */
     private AuthenticationManager authenticationManager;
 
+    /**
+     * Сервис по работе с пользователем
+     */
     private CustomUserDetailService customUserDetailService;
 
     @Override
@@ -33,6 +43,11 @@ public class SecurityServiceImpl implements SecurityService {
         return null;
     }
 
+    /**
+     * Метод для входа в систему
+     * @param username имя пользователя
+     * @param password пароль
+     */
     @Override
     public void autoLogin(String username, String password) {
 

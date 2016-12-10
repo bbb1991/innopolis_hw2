@@ -1,20 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
-    <h1 class="text-center">Books list</h1>
+    <h1 class="text-center">Список книг</h1>
 
     <c:if test="${not empty books}">
         <table class="table table-hover">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Created Date</th>
-                <th>Content</th>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Дата создания</th>
             </tr>
             </thead>
             <tbody>
@@ -24,8 +24,7 @@
                     <td>${book.id}</td>
                     <td>${book.title}</td>
                     <td>${book.author.username}</td>
-                    <td>${book.date}</td>
-                    <td>${book.content}</td>
+                    <td><fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${book.date}"/></td>
                 </tr>
             </c:forEach>
 

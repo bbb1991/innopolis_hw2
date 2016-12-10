@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by bbb1991 on 12/9/16.
+ * Реализация интерфейса {@link BookDAO }
  *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
@@ -22,8 +23,14 @@ import java.util.List;
 @Repository
 public class BookDAOImpl implements BookDAO {
 
+    /**
+     * Сервис для работы с БД
+     */
     private DBService dbService;
 
+    /**
+     * Логгер класса
+     */
     private static final Logger logger = LoggerFactory.getLogger(BookDAOImpl.class);
 
     @Autowired
@@ -31,6 +38,12 @@ public class BookDAOImpl implements BookDAO {
         this.dbService = dbService;
     }
 
+    /**
+     * Сохранение книги в БД
+     *
+     * @param book книга, которую требуется сохранить
+     * @return ID, по которому сохранение книги
+     */
     @Override
     public Long save(Book book) {
         logger.info("Saving new book. Book info: {}");
@@ -51,6 +64,11 @@ public class BookDAOImpl implements BookDAO {
         return book.getId();
     }
 
+    /**
+     * Обновление существующей книги
+     *
+     * @param book книга, которую необходимо обновить
+     */
     @Override
     public void update(Book book) {
         logger.info("Updating book. Info before: {}", book);
@@ -63,6 +81,11 @@ public class BookDAOImpl implements BookDAO {
         logger.info("Book updated!");
     }
 
+    /**
+     * Удаление существующей книги
+     *
+     * @param id ID книги, которую необходимо удалить
+     */
     @Override
     public void delete(Long id) {
 
@@ -80,6 +103,12 @@ public class BookDAOImpl implements BookDAO {
         logger.info("Book deleted.");
     }
 
+    /**
+     * Получение книги по ID
+     *
+     * @param id ID книги по которому ищем
+     * @return книга, которая была найдена, либо <code>null</code>
+     */
     @Override
     public Book getById(Long id) {
         logger.info("Getting Book by ID: {}", id);
@@ -94,6 +123,11 @@ public class BookDAOImpl implements BookDAO {
 
     }
 
+    /**
+     * Получение всех книг
+     *
+     * @return список всех книг
+     */
     @Override
     public List<Book> getAllBooks() {
         logger.info("Getting all books");

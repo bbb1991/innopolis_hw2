@@ -7,9 +7,14 @@
 		http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http auto-config="true">
-        <intercept-url pattern="/dashboard" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+    <http auto-config="true" use-expressions="true">
+        <!-- Домашняя страница пользователя со статистиками -->
+        <intercept-url pattern="/profile" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+
+        <!-- Страница для добавления книги -->
         <intercept-url pattern="/add_book" access="hasRole('ROLE_USER')"/>
+
+        <!-- Страница для администраторов -->
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login login-page="/login" default-target-url="/dashboard" authentication-failure-url="/login?error"

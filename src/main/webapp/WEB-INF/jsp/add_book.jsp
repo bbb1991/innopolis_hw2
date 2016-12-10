@@ -5,6 +5,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="book">
+        <%--@elvariable id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"--%>
         <h2>Add new book</h2>
         <spring:bind path="title">
             <div class="form-group ${status.error ? 'has-error' : ''}">

@@ -6,7 +6,7 @@
 <div class="container">
 
 <form:form method="POST" modelAttribute="userForm">
-    <h2>Create your account</h2>
+    <h2>Создание аккаунта</h2>
     <spring:bind path="username">
         <div class="form-group ${status.error ? 'has-error' : ''}">
             <form:input type="text" path="username" class="form-control" placeholder="Username" autofocus="true"/>
@@ -23,13 +23,12 @@
 
     <spring:bind path="confirmPassword">
         <div class="form-group ${status.error ? 'has-error' : ''}">
-            <form:input type="password" path="confirmPassword" class="form-control"
-                        placeholder="Confirm your password"/>
+            <form:input type="password" path="confirmPassword" class="form-control" placeholder="Confirm your password"/>
             <form:errors path="confirmPassword"/>
         </div>
     </spring:bind>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Регистрация</button>
 </form:form>
 
 </div>

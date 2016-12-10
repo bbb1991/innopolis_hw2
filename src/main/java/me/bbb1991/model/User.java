@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * Created by bbb1991 on 12/8/16.
+ * Модель пользователя
  *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
@@ -15,23 +16,41 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
+    /**
+     * ID по которому хранится пользователь в БД
+     */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Логин пользователя
+     */
     @Column
     private String username;
 
+    /**
+     * Хэш пароля пользователя
+     */
     @Column
     private String password;
 
+    /**
+     * Временное поле для хранение повтора пароля
+     */
     @Transient
     private String confirmPassword;
 
+    /**
+     * Поле которая показывает, заблокирован ли пользователь
+     */
     @Column
     private boolean blocked;
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    /**
+     * Поле, по которому маппится роли и пользователи
+     */
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

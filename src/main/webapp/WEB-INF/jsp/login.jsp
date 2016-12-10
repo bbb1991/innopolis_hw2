@@ -5,7 +5,7 @@
 <div class="container">
 
     <form method="POST" action="${pageContext.request.contextPath}/login">
-        <h2 class="form-heading">Log in</h2>
+        <h2 class="form-heading">Вход в систему</h2>
 
         <div class="form-group ${error != null ? 'has-error' : ''}">
             <span>${message}</span>
@@ -14,8 +14,8 @@
             <span>${error}</span>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
-            <h4 class="text-center"><a href="${pageContext.request.contextPath}/register">Create an account</a></h4>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Вход</button>
+            <h4 class="text-center"><a href="${pageContext.request.contextPath}/register">Создание аккаунта</a></h4>
         </div>
 
     </form>

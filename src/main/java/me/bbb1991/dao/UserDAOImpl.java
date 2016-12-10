@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by bbb1991 on 12/9/16.
+ * Реализация интерфейса {@link UserDAO }
  *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
@@ -23,8 +24,14 @@ import java.util.List;
 @Repository
 public class UserDAOImpl implements UserDAO {
 
+    /**
+     * Сервис для работы с БД
+     */
     private DBService dbService;
 
+    /**
+     * Логгер класса
+     */
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Autowired
@@ -33,6 +40,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
 
+    /**
+     * Сохранение пользователя в БД
+     *
+     * @param user пользователь, которую необходимо сохранить
+     * @return ID, по которому сохранен пользователь
+     */
     @Override
     public Long save(User user) {
 
@@ -54,6 +67,11 @@ public class UserDAOImpl implements UserDAO {
         return user.getId();
     }
 
+    /**
+     * Обновление пользователя в БД
+     *
+     * @param user пользователь, которую необходимо сохранить
+     */
     @Override
     public void update(User user) {
 
@@ -67,6 +85,10 @@ public class UserDAOImpl implements UserDAO {
         logger.info("User updated! After update: {}", user);
     }
 
+    /**
+     * Удаление пользовталея по ID
+     * @param id ID пользователя, которую необходимо удалить
+     */
     @Override
     public void delete(Long id) {
 
@@ -83,6 +105,11 @@ public class UserDAOImpl implements UserDAO {
         logger.info("User deleted!");
     }
 
+    /**
+     * Получение пользователя по ID
+     * @param id ID пользователя, которую необходимо получить
+     * @return пользователь, найденный по ID, или <code>null</code>
+     */
     @Override
     public User getById(Long id) {
 
@@ -100,6 +127,10 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+    /**
+     * Получение всех пользователей в системе
+     * @return список пользователей
+     */
     @Override
     public List<User> getAllUsers() {
 
@@ -116,6 +147,11 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
+    /**
+     * Получение пользователя по имени пользователяа
+     * @param username имя пользователей, по которому ведется поиск
+     * @return пользователь, найденный по имени пользователя
+     */
     @Override
     public User findByUsername(String username) {
         logger.info("Getting user by username: {}", username);

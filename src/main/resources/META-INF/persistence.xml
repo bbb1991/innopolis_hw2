@@ -3,6 +3,8 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
+
+    <!-- Настройки для PostgreSQL -->
     <persistence-unit name="postgres" transaction-type="RESOURCE_LOCAL">
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
@@ -13,7 +15,7 @@
             <property name="hibernate.connection.user" value="postgres"/>
             <property name="hibernate.connection.password" value="postgres"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.flushMode" value="FLUSH_AUTO"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.c3p0.min_size" value="5"/>
@@ -25,6 +27,7 @@
         </properties>
     </persistence-unit>
 
+    <!-- Настройки для БД H2 -->
     <persistence-unit name="h2" transaction-type="RESOURCE_LOCAL">
         <properties>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>

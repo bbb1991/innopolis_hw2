@@ -30,6 +30,9 @@ public class Book {
     @Column
     private String content;
 
+    @Column
+    private boolean draft;
+
     public Book() {
     }
 
@@ -71,6 +74,14 @@ public class Book {
 
     public void setContent(String context) {
         this.content = context;
+    }
+
+    public boolean isDraft() {
+        return draft;
+    }
+
+    public void setDraft(boolean draft) {
+        this.draft = draft;
     }
 
     @Override

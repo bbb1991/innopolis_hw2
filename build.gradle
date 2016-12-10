@@ -22,6 +22,7 @@ dependencies {
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.5.Final'
 
     compile group: 'com.h2database', name: 'h2', version: '1.4.193'
+    compile group: 'org.postgresql', name: 'postgresql', version: '9.4.1212'
 
     compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.4.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-web', version: '4.2.0.RELEASE'

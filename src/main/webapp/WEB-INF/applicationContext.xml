@@ -14,7 +14,7 @@
     <context:component-scan base-package="me.bbb1991.*"/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-        <!--<property name="persistenceUnitName" value="students.jpa"/>-->
+        <property name="persistenceUnitName" value="postgres"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

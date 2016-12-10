@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,7 +21,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     private AuthenticationManager authenticationManager;
 
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailService customUserDetailService;
 
     @Override
     public String findLoggedInUsername() {
@@ -36,16 +35,23 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autoLogin(String username, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        logger.info("Trying to log in with username: {}", username);
+
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
+        logger.info("BEFORE AUTHENTICATE");
         authenticationManager.authenticate(authenticationToken);
+        logger.info("AFTER AUTHENTICATE");
 
         if (authenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            logger.debug(String.format("Successfully %s auto logged in", username));
+            logger.info(String.format("Successfully %s auto logged in", username));
+        } else {
+            logger.warn("Not logged in: {}" , authenticationToken.isAuthenticated());
         }
     }
 
@@ -55,7 +61,7 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Autowired
-    public void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public void setCustomUserDetailService(CustomUserDetailService customUserDetailService) {
+        this.customUserDetailService = customUserDetailService;
     }
 }

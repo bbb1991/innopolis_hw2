@@ -1,25 +1,25 @@
-CREATE TABLE users (
-  id       INT PRIMARY KEY AUTO_INCREMENT,
-  username VARCHAR2(32)  NOT NULL,
-  password VARCHAR2(255) NOT NULL,
-  blocked  BOOLEAN         DEFAULT FALSE
+CREATE TABLE IF NOT EXISTS users (
+  id       SERIAL PRIMARY KEY,
+  username VARCHAR(32)  NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  blocked  BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE books (
-  id        INT PRIMARY KEY AUTO_INCREMENT,
-  title     VARCHAR2(255) NOT NULL,
-  author_id INT           NOT NULL,
-  date      TIMESTAMP       DEFAULT SYSTIMESTAMP,
-  content   TEXT          NOT NULL,
+CREATE TABLE IF NOT EXISTS books (
+  id        SERIAL PRIMARY KEY ,
+  title     VARCHAR(255) NOT NULL,
+  author_id INT          NOT NULL,
+  date      TIMESTAMP DEFAULT now(),
+  content   TEXT         NOT NULL,
   FOREIGN KEY (author_id) REFERENCES users (id)
 );
 
-CREATE TABLE roles (
-  id   INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR2(60)
+CREATE TABLE IF NOT EXISTS roles (
+  id   SERIAL PRIMARY KEY ,
+  name VARCHAR(60)
 );
 
-CREATE TABLE user_roles (
+CREATE TABLE IF NOT EXISTS user_roles (
   user_id INT NOT NULL,
   role_id INT NOT NULL,
 
@@ -27,7 +27,7 @@ CREATE TABLE user_roles (
   FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
-INSERT INTO users (username, password) VALUES ('admin', '$2a$11$4c9jr3hajkKXmGEuFY11guYHCOfDsT2RTbWoiBeYFuJ0fmQLpnsLK');
+INSERT INTO users (username, password) VALUES ('admin', '$2a$11$BYC7YD1L/bHutHPEkgclVemSgF7Y.CnltGEn1LUBNd5XbnqZXahS6');
 
 INSERT INTO roles (name) VALUES ('ROLE_USER');
 INSERT INTO roles (name) VALUES ('ROLE_ADMIN');

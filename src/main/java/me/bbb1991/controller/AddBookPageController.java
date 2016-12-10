@@ -2,8 +2,11 @@ package me.bbb1991.controller;
 
 import me.bbb1991.model.Book;
 import me.bbb1991.model.User;
+import me.bbb1991.service.CustomUserDetail;
 import me.bbb1991.service.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,15 +44,18 @@ public class AddBookPageController {
 
         // TODO: 12/9/16 add validation logic here
 
-        // FIXME: 12/9/16 get user by authorized user
-        User user = dbService.getUserById(1L);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        CustomUserDetail customUser = (CustomUserDetail) authentication.getPrincipal();
+        Long userId = customUser.getId();
+        User user = dbService.getUserById(userId);
 
         book.setAuthor(user);
         book.setDate(new Date());
 
-        Long id = dbService.saveOrUpdateBook(book);
+        Long bookId = dbService.saveOrUpdateBook(book);
 
-        return String.format("redirect:/book/%d", id);
+        return String.format("redirect:/book/%d", bookId);
     }
 
     @Autowired

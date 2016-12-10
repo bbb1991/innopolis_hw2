@@ -9,13 +9,11 @@ import me.bbb1991.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,9 +26,9 @@ import java.util.Set;
  */
 
 @Service
-public class DBService implements InitializingBean, DisposableBean, UserService, BookService{
+public class DBService implements DisposableBean, UserService, BookService {
 
-    // TODO: 12/9/16 Separate to SecurityService and BookService
+    // TODO: 12/9/16 Separate to UserService and BookService
 
     private static final Logger logger = LoggerFactory.getLogger(DBService.class);
 
@@ -64,14 +62,14 @@ public class DBService implements InitializingBean, DisposableBean, UserService,
         this.roleDAO = roleDAO;
     }
 
-    @Override
-    public List<Book> getAllBooks() {
-        return bookDAO.getAllBooks();
+    @Autowired
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
-    public void afterPropertiesSet() {
-        entityManagerFactory = Persistence.createEntityManagerFactory( "h2" );
+    public List<Book> getAllBooks() {
+        return bookDAO.getAllBooks();
     }
 
     public EntityManagerFactory getEntityManagerFactory() {

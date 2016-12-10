@@ -33,7 +33,7 @@
         <!--</authentication-provider>-->
     <!--</authentication-manager>-->
 
-    <beans:bean id="userDetailsServiceImpl" class="me.bbb1991.service.UserDetailsServiceImpl"/>
+    <beans:bean id="userDetailsServiceImpl" class="me.bbb1991.service.CustomUserDetailService"/>
 
     <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <beans:constructor-arg name="strength" value="11"/>

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -123,7 +124,7 @@ public class UserDAOImpl implements UserDAO {
 
 
         Query query = entityManager.createQuery("select u from User u where username=:username");
-        query.setParameter("username", username);
+        query.setParameter("username", username).setMaxResults(1);
 
         User user = (User) query.getResultList().get(0); // TODO: 12/10/16 fix this mess
 

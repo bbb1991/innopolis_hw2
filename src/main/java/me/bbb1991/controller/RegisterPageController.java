@@ -3,6 +3,8 @@ package me.bbb1991.controller;
 import me.bbb1991.model.User;
 import me.bbb1991.service.SecurityService;
 import me.bbb1991.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class RegisterPageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(RegisterPageController.class);
 
     private UserService userService;
 

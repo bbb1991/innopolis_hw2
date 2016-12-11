@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -87,6 +86,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Удаление пользовталея по ID
+     *
      * @param id ID пользователя, которую необходимо удалить
      */
     @Override
@@ -107,6 +107,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Получение пользователя по ID
+     *
      * @param id ID пользователя, которую необходимо получить
      * @return пользователь, найденный по ID, или <code>null</code>
      */
@@ -129,6 +130,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Получение всех пользователей в системе
+     *
      * @return список пользователей
      */
     @Override
@@ -149,6 +151,7 @@ public class UserDAOImpl implements UserDAO {
 
     /**
      * Получение пользователя по имени пользователяа
+     *
      * @param username имя пользователей, по которому ведется поиск
      * @return пользователь, найденный по имени пользователя
      */
@@ -169,5 +172,39 @@ public class UserDAOImpl implements UserDAO {
         logger.info("Got user: {}", user);
 
         return user;
+    }
+
+    /**
+     * Блокирование пользователя по ID
+     *
+     * @param id ID пользователя, которого необходимо блокировать
+     */
+    @Override
+    public void blockUser(Long id) {
+        blockUnblockUser(id, true);
+    }
+
+    /**
+     * Разблокирование пользователя по ID
+     *
+     * @param id ID пользователя
+     */
+    @Override
+    public void unblockUser(Long id) {
+        blockUnblockUser(id, false);
+    }
+
+    private void blockUnblockUser(Long id, boolean status) {
+        EntityManager manager = dbService.getEntityManagerFactory().createEntityManager();
+        manager.getTransaction().begin();
+
+        manager.createQuery("update User u set u.blocked=:status where u.id=:id")
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .executeUpdate();
+
+        manager.getTransaction().commit();
+
+        manager.close();
     }
 }

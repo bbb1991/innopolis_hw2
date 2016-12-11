@@ -57,4 +57,12 @@ public interface UserDAO {
      * @return найденный пользователь, либо <code>null</code>
      */
     User findByUsername(String username);
+
+    /**
+     * Блокирование пользователя по ID
+     * @param id ID пользователя
+     */
+    void blockUser(Long id);
+
+    void unblockUser(Long id);
 }

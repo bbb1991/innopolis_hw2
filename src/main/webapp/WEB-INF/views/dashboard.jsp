@@ -19,12 +19,12 @@
             </thead>
             <tbody>
 
-            <c:forEach var="book" items="${books}">
-                <tr class='clickable-row' data-href='${pageContext.request.contextPath}/book/${book.id}'>
-                    <td>${book.id}</td>
-                    <td>${book.title}</td>
-                    <td>${book.author.username}</td>
-                    <td><fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${book.date}"/></td>
+            <c:forEach var="user" items="${books}">
+                <tr class='clickable-row' data-href='${pageContext.request.contextPath}/book/${user.id}'>
+                    <td>${user.id}</td>
+                    <td>${user.title}</td>
+                    <td>${user.author.username}</td>
+                    <td><fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${user.date}"/></td>
                 </tr>
             </c:forEach>
 

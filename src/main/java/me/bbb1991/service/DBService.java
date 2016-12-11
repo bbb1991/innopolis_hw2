@@ -118,4 +118,16 @@ public class DBService implements DisposableBean, UserService, BookService {
     public User getUserById(Long id) {
         return userDAO.getById(id);
     }
+
+    public void blockUserById(Long id) {
+        userDAO.blockUser(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userDAO.getAllUsers();
+    }
+
+    public void unblockUserById(Long id) {
+        userDAO.unblockUser(id);
+    }
 }

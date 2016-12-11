@@ -69,7 +69,7 @@ public class DBService implements DisposableBean, UserService, BookService {
 
     @Override
     public List<Book> getAllBooks() {
-        return bookDAO.getAllBooks();
+        return bookDAO.findAll();
     }
 
     public EntityManagerFactory getEntityManagerFactory() {
@@ -83,15 +83,13 @@ public class DBService implements DisposableBean, UserService, BookService {
 
     @Override
     public Book getBookById(Long id) {
-        return bookDAO.getById(id);
+        return bookDAO.findOne(id);
     }
 
     @Override
     public Long saveOrUpdateBook(Book book) {
-        if (book.getId() == null) {
-            return bookDAO.save(book);
-        }
-        bookDAO.update(book);
+
+        bookDAO.save(book);
 
         return book.getId();
     }

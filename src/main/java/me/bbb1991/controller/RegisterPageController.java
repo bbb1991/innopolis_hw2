@@ -32,6 +32,7 @@ public class RegisterPageController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
+        model.addAttribute("title", "Регистрация нового пользователя");
 
         return "register";
     }

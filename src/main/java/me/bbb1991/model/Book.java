@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * Created by bbb1991 on 12/8/16.
- *
+ * Модель книги
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  * @version 1.0
@@ -14,22 +14,40 @@ import java.util.Date;
 @Table(name = "books")
 public class Book {
 
+    /**
+     * ID, по которому будет хранится книга в БД
+     */
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Название книги
+     */
     @Column
     private String title;
 
+    /**
+     * Автор книги
+     */
     @ManyToOne
     private User author;
 
+    /**
+     * Дата создания
+     */
     @Column
     private Date date;
 
+    /**
+     * Содержание книги
+     */
     @Column
     private String content;
 
+    /**
+     * Пометка, можно ли показывать книгу читателям или все же ходе написания, то есть черновик
+     */
     @Column
     private boolean draft;
 

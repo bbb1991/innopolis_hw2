@@ -29,6 +29,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailService.class);
 
+    /**
+     * ДАО для работы с сущностями {@link User}
+     */
     private UserDAO userDAO;
 
     @Override
@@ -46,6 +49,10 @@ public class CustomUserDetailService implements UserDetailsService {
             logger.info("role {}", role);
         }
 
+        /*
+         cоздаем обертку, вставляем информацию о пользователей и вместо стандартного {@link UserDetails}
+         возвращаем обертку
+          */
         CustomUserDetail customUserDetail = new CustomUserDetail();
         customUserDetail.setUser(domainUser);
         customUserDetail.setAuthorities(authorities);

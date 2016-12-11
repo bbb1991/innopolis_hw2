@@ -20,24 +20,40 @@ import java.util.Set;
 
 /**
  * Created by bbb1991 on 12/9/16.
+ * Класс для работы с БД
  *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
  */
 
 @Service
-public class DBService implements DisposableBean, UserService, BookService {
+public class DBService implements UserService, BookService {
 
     // TODO: 12/9/16 Separate to UserService and BookService
 
+    /**
+     * Логгер уровня класса
+     */
     private static final Logger logger = LoggerFactory.getLogger(DBService.class);
 
+    /**
+     * Подлючение к БД
+     */
     private EntityManagerFactory entityManagerFactory;
 
+    /**
+     * ДАО для работы с сущностями {@link User}
+     */
     private UserDAO userDAO;
 
+    /**
+     * ДАО для работы с сущностями {@link Book}
+     */
     private BookDAO bookDAO;
 
+    /**
+     * ДАО для работы с сущностями {@link Role}
+     */
     private RoleDAO roleDAO;
 
     private BCryptPasswordEncoder passwordEncoder;
@@ -67,6 +83,11 @@ public class DBService implements DisposableBean, UserService, BookService {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+    /**
+     * Получение всех книг в системе.
+     *
+     * @return список всех книг
+     */
     @Override
     public List<Book> getAllBooks() {
         return bookDAO.findAll();
@@ -76,16 +97,23 @@ public class DBService implements DisposableBean, UserService, BookService {
         return entityManagerFactory;
     }
 
-    @Override
-    public void destroy() {
-        entityManagerFactory.close();
-    }
-
+    /**
+     * Получение книги по ID.
+     *
+     * @param id ID книги
+     * @return найденная книга, либо <code>null</code>
+     */
     @Override
     public Book getBookById(Long id) {
         return bookDAO.findOne(id);
     }
 
+    /**
+     * Сохранение новой книги или обновление существующего
+     *
+     * @param book книга, с которым нужно химмичить
+     * @return ID, по которому сохранена данная книга
+     */
     @Override
     public Long saveOrUpdateBook(Book book) {
 
@@ -94,6 +122,11 @@ public class DBService implements DisposableBean, UserService, BookService {
         return book.getId();
     }
 
+    /**
+     * Метод для сохранения нового пользователя или обновления существующего
+     *
+     * @param user пользователь
+     */
     @Override
     public void saveOrUpdate(User user) {
         if (user.getId() == null) {
@@ -107,24 +140,51 @@ public class DBService implements DisposableBean, UserService, BookService {
         userDAO.update(user);
     }
 
+    /**
+     * Поиск пользователя по логину
+     *
+     * @param username логин предпологаемого пользователя
+     * @return Пользователь, нвйденный по логину, либо null
+     */
     @Override
     public User findByUsername(String username) {
         return userDAO.findByUsername(username);
     }
 
+    /**
+     * Получение пользователя по ID
+     *
+     * @param id ID пользователя
+     * @return Пользователь, найденный по ID, либо <code>null</code>
+     */
     @Override
     public User getUserById(Long id) {
         return userDAO.getById(id);
     }
 
+    /**
+     * Заблокирование пользователя
+     *
+     * @param id ID пользователя, которого необходимо заблокировать
+     */
     public void blockUserById(Long id) {
         userDAO.blockUser(id);
     }
 
+    /**
+     * Получение всех пользователей системы для дальнейшей работы
+     *
+     * @return список всех пользователей
+     */
     public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
 
+    /**
+     * Разблокирование пользователя
+     *
+     * @param id ID пользователя, которого необходимо разблокировать
+     */
     public void unblockUserById(Long id) {
         userDAO.unblockUser(id);
     }

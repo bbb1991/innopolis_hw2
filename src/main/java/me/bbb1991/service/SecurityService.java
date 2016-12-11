@@ -11,5 +11,10 @@ public interface SecurityService {
 
     String findLoggedInUsername();
 
+    /**
+     * Метод по обработке запроса на вхрод в систему
+     * @param username логин, введенный пользователем
+     * @param password пароль, введенный пользователем
+     */
     void autoLogin(String username, String password);
 }

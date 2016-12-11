@@ -5,6 +5,7 @@ import java.util.Set;
 
 /**
  * Created by bbb1991 on 12/9/16.
+ * Сущность ролей пользователя в системе
  *
  * @author Bagdat Bimaganbetov
  * @author bagdat.bimaganbetov@gmail.com
@@ -14,13 +15,22 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role {
 
+    /**
+     * ID, по которому будет хранится роль
+     */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * Название роля пользователя
+     */
     @Column
     private String name;
 
+    /**
+     * Связка с пользователями
+     */
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<User> users;
 

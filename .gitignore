@@ -11,3 +11,4 @@ out
 # Developer's test files
 src/main/java/main/Test.java
 *.db
+questions.txt

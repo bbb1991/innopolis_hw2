@@ -4,6 +4,7 @@
 <body>
 
 <div class="container">
+    <%@include file="fragment/navbar.jsp"%>
 
     <form:form method="POST" modelAttribute="userForm">
         <h2>Создание аккаунта</h2>

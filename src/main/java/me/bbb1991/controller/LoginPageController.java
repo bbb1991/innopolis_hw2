@@ -5,6 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by bbb1991 on 12/9/16.
  *
@@ -26,6 +29,13 @@ public class LoginPageController {
         }
 
         return "login";
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request) throws ServletException {
+        request.logout();
+
+        return "redirect:/dashboard";
     }
 
 }

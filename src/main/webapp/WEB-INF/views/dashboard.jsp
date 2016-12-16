@@ -5,6 +5,7 @@
 <%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
+    <%@include file="fragment/navbar.jsp"%>
     <h1 class="text-center">Список книг</h1>
 
     <c:if test="${not empty books}">

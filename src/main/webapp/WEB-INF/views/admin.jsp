@@ -3,6 +3,7 @@
 <%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
+    <%@include file="fragment/navbar.jsp"%>
     <h1 class="text-center">secret message for admins</h1>
     <c:choose>
         <c:when test="${not empty users}">

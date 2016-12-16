@@ -4,11 +4,12 @@
 <%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
+    <%@include file="fragment/navbar.jsp"%>
     <c:if test="${not empty book}">
         <h1 class="text-center">Тема: ${book.title}</h1>
-        <p>Дата создания: <fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${book.date}"/></p>
-        <p>Автор: ${book.author.username}</p>
-        <p>Содержание:</p>
+        <p><b>Дата создания:</b> <fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${book.date}"/></p>
+        <p><b>Автор:</b> ${book.author.username}</p>
+        <p><b>Содержание:</b></p>
         <p>${book.content}</p>
     </c:if>
 </div>

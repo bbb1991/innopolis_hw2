@@ -3,6 +3,7 @@
 <%@include file="fragment/header.jsp" %>
 <body>
 <div class="container">
+    <%@include file="fragment/navbar.jsp"%>
 
     <form method="POST" action="${pageContext.request.contextPath}/login">
         <h2 class="form-heading">Вход в систему</h2>

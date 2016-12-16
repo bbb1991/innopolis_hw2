@@ -1,5 +1,6 @@
 package me.bbb1991.controller;
 
+import me.bbb1991.helpers.CustomException;
 import me.bbb1991.model.Book;
 import me.bbb1991.service.DBService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class ViewBookPageController {
         Book book = dbService.getBookById(id);
 
         if (book == null) {
-            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, String.format("No book found with ID: %d", id));
+            throw new CustomException(HttpStatus.NOT_FOUND, String.format("No book found with ID: %d", id));
         }
 
         model.addAttribute("title", book.getTitle());

@@ -5,7 +5,7 @@
 <div class="container">
     <%@include file="fragment/navbar.jsp"%>
 
-    <form:form method="POST" modelAttribute="book">
+    <form:form method="POST" modelAttribute="book" action="${pageContext.request.contextPath}/add_book">
         <%--@elvariable id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"--%>
         <h2>Add new book</h2>
         <spring:bind path="title">

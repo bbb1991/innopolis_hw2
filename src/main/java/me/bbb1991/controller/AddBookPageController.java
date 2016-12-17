@@ -82,7 +82,7 @@ public class AddBookPageController {
     }
 
 
-    @RequestMapping("/edit_book/{id}")
+    @RequestMapping(value = "/edit_book/{id}", method = RequestMethod.GET)
     public String editBook(@PathVariable("id") Long id, Model model) {
 
         logger.info("Incoming request for edit book by ID: {}", id);
@@ -93,6 +93,17 @@ public class AddBookPageController {
         model.addAttribute("book", book);
 
         return "add_book";
+    }
+
+    @RequestMapping("delete_book/{id}")
+    public String deleteBook(@PathVariable("id") Long id) {
+
+
+        // TODO: 12/16/16 check user permission
+
+        dbService.deleteBookById(id);
+
+        return "redirect:/dashboard";
     }
 
     @Autowired

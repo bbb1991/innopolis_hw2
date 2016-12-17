@@ -188,4 +188,18 @@ public class DBService implements UserService, BookService {
     public void unblockUserById(Long id) {
         userDAO.unblockUser(id);
     }
+
+    /**
+     * Удаление книги по ID
+     * @param id ID книги
+     */
+    @Override
+    public void deleteBookById(Long id) {
+        bookDAO.delete(id);
+    }
+
+    @Override
+    public List<Book> getBooksByAuthor(String username) {
+        return bookDAO.findByUsername(username);
+    }
 }

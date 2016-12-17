@@ -36,4 +36,16 @@ public interface BookService {
      */
     List<Book> getAllBooks();
 
+    /**
+     * Удаление книги по ID
+     * @param id ID книги
+     */
+    void deleteBookById(Long id);
+
+    /**
+     * Получение всех книг автора
+     * @param username автор
+     * @return список книг
+     */
+    List<Book> getBooksByAuthor(String username);
 }

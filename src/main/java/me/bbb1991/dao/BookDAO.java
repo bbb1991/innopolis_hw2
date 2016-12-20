@@ -16,7 +16,13 @@ import java.util.List;
  */
 public interface BookDAO extends JpaRepository<Book, Long> {
 
-    @Query("SELECT b FROM Book b where b.author.username=:username")
+    /**
+     * Получение всех книг автора, исключая книги, которые еще не закончены, то есть помечены как черновик
+     *
+     * @param username логин автора
+     * @return список книг автора
+     */
+    @Query("SELECT b FROM Book b where b.author.username=:username and b.draft=false")
     List<Book> findByUsername(@Param("username") String username);
 
 }

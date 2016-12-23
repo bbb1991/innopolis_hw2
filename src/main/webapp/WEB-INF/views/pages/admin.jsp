@@ -16,17 +16,17 @@
                 </thead>
                 <tbody>
 
-                <c:forEach var="user" items="${users}">
+                <c:forEach var="book" items="${users}">
                     <tr>
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td>${user.blocked ? "Заблокирован" : "Не заблокирован"}</td>
-                        <c:if test="${user.blocked}">
-                            <td><a href="${pageContext.request.contextPath}/admin/unblock/${user.id}">Разблокировать</a>
+                        <td>${book.id}</td>
+                        <td>${book.username}</td>
+                        <td>${book.blocked ? "Заблокирован" : "Не заблокирован"}</td>
+                        <c:if test="${book.blocked}">
+                            <td><a href="${pageContext.request.contextPath}/admin/unblock/${book.id}">Разблокировать</a>
                             </td>
                         </c:if>
-                        <c:if test="${not user.blocked}">
-                            <td><a href="${pageContext.request.contextPath}/admin/block/${user.id}">Заблокировать</a>
+                        <c:if test="${not book.blocked}">
+                            <td><a href="${pageContext.request.contextPath}/admin/block/${book.id}">Заблокировать</a>
                             </td>
                         </c:if>
 

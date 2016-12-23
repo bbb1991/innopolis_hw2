@@ -30,8 +30,12 @@
         <put-attribute name="content" value="/WEB-INF/views/pages/book.jsp"/>
     </definition>
 
-    <definition name="error_page" extends="base">
+    <definition name="errorPage" extends="base">
         <put-attribute name="content" value="/WEB-INF/views/pages/errorPage.jsp"/>
+    </definition>
+
+    <definition name="main_page" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/main_page.jsp"/>
     </definition>
 
     <definition name="register" extends="base">

@@ -12,3 +12,6 @@ out
 src/main/java/main/Test.java
 *.db
 questions.txt
+
+#Other files
+src/main/webapp/resources/avatars/*

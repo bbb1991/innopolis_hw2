@@ -21,7 +21,7 @@ public final class Constants {
     /**
      * Имя файла настроек
      */
-    public static final String SETTINGS_FILE = "settings.properties";
+    public static final String SETTINGS_FILE = "application.properties";
 
     public static final int MIN_PASSWORD_LENGTH = 1;
 

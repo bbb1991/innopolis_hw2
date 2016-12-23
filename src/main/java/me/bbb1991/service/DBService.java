@@ -3,6 +3,7 @@ package me.bbb1991.service;
 import me.bbb1991.dao.BookDAO;
 import me.bbb1991.dao.RoleDAO;
 import me.bbb1991.dao.UserDAO;
+import me.bbb1991.helpers.Helper;
 import me.bbb1991.model.Book;
 import me.bbb1991.model.Role;
 import me.bbb1991.model.User;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,11 +39,6 @@ public class DBService implements UserService, BookService {
     private static final Logger logger = LoggerFactory.getLogger(DBService.class);
 
     /**
-     * Подлючение к БД
-     */
-    private EntityManagerFactory entityManagerFactory;
-
-    /**
      * ДАО для работы с сущностями {@link User}
      */
     private UserDAO userDAO;
@@ -56,7 +53,7 @@ public class DBService implements UserService, BookService {
      */
     private RoleDAO roleDAO;
 
-    private BCryptPasswordEncoder passwordEncoder;
+    private Helper helper;
 
     @Autowired
     public void setUserDAO(UserDAO userDAO) {
@@ -69,18 +66,13 @@ public class DBService implements UserService, BookService {
     }
 
     @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    @Autowired
     public void setRoleDAO(RoleDAO roleDAO) {
         this.roleDAO = roleDAO;
     }
 
     @Autowired
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    public void setHelper(Helper helper) {
+        this.helper = helper;
     }
 
     /**
@@ -91,10 +83,6 @@ public class DBService implements UserService, BookService {
     @Override
     public List<Book> getAllBooks() {
         return bookDAO.findAll();
-    }
-
-    public EntityManagerFactory getEntityManagerFactory() {
-        return entityManagerFactory;
     }
 
     /**
@@ -130,10 +118,14 @@ public class DBService implements UserService, BookService {
     @Override
     public void saveOrUpdate(User user) {
         if (user.getId() == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            user.setPassword(helper.getPasswordHash(user.getPassword()));
+            user.setAvatar("resources" + File.separator + "images" + File.separator +"default-avatar.png");
+
             Set<Role> roles = new HashSet<>();
             roles.add(roleDAO.getOne(1L));
             user.setRoles(roles);
+
             userDAO.save(user);
             return;
         }

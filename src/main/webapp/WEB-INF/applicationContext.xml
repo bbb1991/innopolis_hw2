@@ -25,11 +25,6 @@
 
     <!-- Apache Tiles Configs -->
 
-
-
-
-    <!--<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"/>-->
-
     <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
     </bean>
@@ -41,5 +36,7 @@
             </list>
         </property>
     </bean>
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer"/>
 
 </beans>

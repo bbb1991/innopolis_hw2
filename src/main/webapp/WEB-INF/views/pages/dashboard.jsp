@@ -1,40 +1,39 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html; charset=utf-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <div>
-    <h1 class="text-center">Список книг</h1>
 
-    <c:if test="${not empty books}">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Название</th>
-                <th>Автор</th>
-                <th>Дата создания</th>
-            </tr>
-            </thead>
-            <tbody>
+    <h3>Current avatar:</h3>
+    <img src="${pageContext.request.contextPath}/${user.avatar}" width="250" height="350" class="img-responsive">
+    <br>
+    <hr>
 
-            <c:forEach var="user" items="${books}">
-                <tr class='clickable-row' data-href='${pageContext.request.contextPath}/book/${user.id}'>
-                    <td>${user.id}</td>
-                    <td>${user.title}</td>
-                    <td>${user.author.username}</td>
-                    <td>${user.date}</td>
-                </tr>
-            </c:forEach>
+    <h3>Upload avatar</h3>
+    <form method="post" action="${pageContext.request.contextPath}/dashboard/avatar?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
+        <label for="upload">Choose image for upload:</label>
+        <input id="upload" type="file" name="avatar" accept="image/*"><br>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
-            </tbody>
-        </table>
+        <input type="submit" value="Upload image">
+    </form>
+    <br>
+    <hr>
 
-        <br>
-    </c:if>
-    <script>
-        jQuery(document).ready(function ($) {
-            $(".clickable-row").click(function () {
-                window.document.location = $(this).data("href");
-            });
-        });
-    </script>
+    <h3>Change password:</h3>
+    <form method="post" action="${pageContext.request.contextPath}/dashboard/change_password">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+        <div class="form-group">
+            <label for="oldPassword">Old Password:</label>
+            <input type="password" id="oldPassword" name="oldPassword" class="form-control" placeholder="Current password">
+            <label for="p1">Password: </label>
+            <input id="p1" name="password" type="password" class="form-control" placeholder="Password" autofocus/>
+            <label for="p2">Confirm password: </label>
+            <input id="p2" name="confirmPassword" type="password" class="form-control" placeholder="Password again"/>
+        </div>
+        <input type="submit" value="Change Password">
+    </form>
+    <br>
+    <hr>
+
+
 </div>

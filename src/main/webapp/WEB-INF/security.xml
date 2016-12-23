@@ -17,10 +17,12 @@
         <!-- Страница для администраторов -->
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
 
+        <intercept-url pattern="/dashboard" access="isAuthenticated()"/>
+
         <form-login login-page="/login" default-target-url="/dashboard" authentication-failure-url="/login?error"
                     username-parameter="username" password-parameter="password"/>
 
-        <logout logout-success-url="/" logout-url="/logout" delete-cookies="JSESSIONID"/>
+        <logout logout-success-url="/login" logout-url="/logout" delete-cookies="JSESSIONID"/>
     </http>
 
     <authentication-manager alias="authenticationManager">
@@ -28,15 +30,6 @@
             <password-encoder ref="encoder"/>
         </authentication-provider>
     </authentication-manager>
-
-    <!--<authentication-manager>-->
-    <!--<authentication-provider>-->
-    <!--<user-service>-->
-    <!--<user name="admin" password="admin" authorities="ROLE_ADMIN"/>-->
-    <!--<user name="guest" password="guest" authorities="ROLE_USER"/>-->
-    <!--</user-service>-->
-    <!--</authentication-provider>-->
-    <!--</authentication-manager>-->
 
     <beans:bean id="userDetailsServiceImpl" class="me.bbb1991.service.CustomUserDetailService"/>
 

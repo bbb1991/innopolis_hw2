@@ -47,6 +47,9 @@ public class User {
     @Column
     private boolean blocked;
 
+    @Column
+    private String avatar;
+
     /**
      * Поле, по которому маппится роли и пользователи
      */
@@ -107,6 +110,14 @@ public class User {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     @Override

@@ -37,6 +37,9 @@ dependencies {
     compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 
     compile group: 'org.apache.tiles', name: 'tiles-extras', version: '3.0.7'
+
+    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.2'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 gretty {

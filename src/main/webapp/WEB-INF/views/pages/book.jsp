@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
-<%@ page contentType="text/html; charset=utf-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 
 <div>
     <c:if test="${not empty book}">
@@ -14,6 +15,11 @@
     </c:if>
 
     <br>
-    <p><a href="${pageContext.request.contextPath}/edit_book/${book.id}">Изменить книгу</a></p>
-    <p><a href="${pageContext.request.contextPath}/delete_book/${book.id}">Удалить книгу</a></p>
+    <sec:authorize access="isAuthenticated()">
+        <sec:authentication property="principal.username" var="username"/>
+        <c:if test="${book.author.username == username}">
+            <p><a href="${pageContext.request.contextPath}/edit_book/${book.id}">Изменить книгу</a></p>
+            <p><a href="${pageContext.request.contextPath}/delete_book/${book.id}">Удалить книгу</a></p>
+        </c:if>
+    </sec:authorize>
 </div>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="base" template="/WEB-INF/views/main_template.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp"/>
+        <put-attribute name="navbar" value="/WEB-INF/views/tiles/navbar.jsp"/>
+        <put-attribute name="title" value=" | Электронная библиотека"/>
+        <put-attribute name="content" value=""/>
+    </definition>
+
+    <definition name="dashboard" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/dashboard.jsp"/>
+    </definition>
+
+    <definition name="login" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/login.jsp"/>
+    </definition>
+
+    <definition name="add_book" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/add_book.jsp"/>
+    </definition>
+
+    <definition name="admin" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/admin.jsp"/>
+    </definition>
+
+    <definition name="book" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/book.jsp"/>
+    </definition>
+
+    <definition name="error_page" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/errorPage.jsp"/>
+    </definition>
+
+    <definition name="register" extends="base">
+        <put-attribute name="content" value="/WEB-INF/views/pages/register.jsp"/>
+    </definition>
+</tiles-definitions>

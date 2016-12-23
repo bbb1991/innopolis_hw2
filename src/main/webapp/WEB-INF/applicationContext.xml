@@ -23,4 +23,23 @@
 
     <jpa:repositories base-package="me.bbb1991.dao" entity-manager-factory-ref="entityManagerFactory"/>
 
+    <!-- Apache Tiles Configs -->
+
+
+
+
+    <!--<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"/>-->
+
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles3.TilesView" />
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer" id="tilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/views/tiles.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

@@ -1,9 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<%@include file="fragment/header.jsp" %>
-<body>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=utf-8"%>
+
 <div class="container">
-    <%@include file="fragment/navbar.jsp"%>
     <h1 class="text-center">secret message for admins</h1>
     <c:choose>
         <c:when test="${not empty users}">
@@ -43,5 +41,3 @@
         </c:otherwise>
     </c:choose>
 </div>
-</body>
-</html>

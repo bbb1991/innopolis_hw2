@@ -1,11 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<html>
-<%@include file="fragment/header.jsp" %>
-<body>
-<div class="container">
-    <%@include file="fragment/navbar.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ page contentType="text/html; charset=utf-8"%>
+<div>
     <h1 class="text-center">Список книг</h1>
 
     <c:if test="${not empty books}">
@@ -25,7 +21,7 @@
                     <td>${user.id}</td>
                     <td>${user.title}</td>
                     <td>${user.author.username}</td>
-                    <td><fmt:formatDate pattern="dd MMMM yyyy HH:mm" value="${user.date}"/></td>
+                    <td>${user.date}</td>
                 </tr>
             </c:forEach>
 
@@ -34,13 +30,11 @@
 
         <br>
     </c:if>
-</div>
-<script>
-    jQuery(document).ready(function ($) {
-        $(".clickable-row").click(function () {
-            window.document.location = $(this).data("href");
+    <script>
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").click(function () {
+                window.document.location = $(this).data("href");
+            });
         });
-    });
-</script>
-</body>
-</html>
+    </script>
+</div>

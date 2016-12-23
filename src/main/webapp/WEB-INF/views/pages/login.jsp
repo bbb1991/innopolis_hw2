@@ -1,9 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<%@include file="fragment/header.jsp" %>
-<body>
-<div class="container">
-    <%@include file="fragment/navbar.jsp"%>
+<%@ page contentType="text/html; charset=utf-8"%>
+<div>
 
     <form method="POST" action="${pageContext.request.contextPath}/login">
         <h2 class="form-heading">Вход в систему</h2>
@@ -22,5 +18,3 @@
     </form>
 
 </div>
-</body>
-</html>

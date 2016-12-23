@@ -35,6 +35,8 @@ dependencies {
 
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+
+    compile group: 'org.apache.tiles', name: 'tiles-extras', version: '3.0.7'
 }
 
 gretty {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
@@ -26,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
     /**
      * Сервис для работы с БД
      */
-    private DBService dbService;
+    private EntityManagerFactory entityManagerFactory;
 
     /**
      * Логгер класса
@@ -34,10 +35,9 @@ public class UserDAOImpl implements UserDAO {
     private static final Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
-
 
     /**
      * Сохранение пользователя в БД
@@ -50,7 +50,7 @@ public class UserDAOImpl implements UserDAO {
 
         logger.info("Saving new user...");
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
@@ -76,7 +76,7 @@ public class UserDAOImpl implements UserDAO {
 
         logger.info("Updating info about user. Before: {}", user);
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         entityManager.merge(user);
         entityManager.close();
@@ -94,7 +94,7 @@ public class UserDAOImpl implements UserDAO {
 
         logger.info("Deleting user by ID: {}", id);
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         User user = getById(id);
 
@@ -116,7 +116,7 @@ public class UserDAOImpl implements UserDAO {
 
         logger.info("Getting user bty id: {}", id);
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
 
         User user = entityManager.find(User.class, id);
@@ -134,11 +134,12 @@ public class UserDAOImpl implements UserDAO {
      * @return список пользователей
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
 
         logger.info("Getting all users...");
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         List<User> users = entityManager.createQuery("from User").getResultList();
 
@@ -159,7 +160,7 @@ public class UserDAOImpl implements UserDAO {
     public User findByUsername(String username) {
         logger.info("Getting user by username: {}", username);
 
-        EntityManager entityManager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
 
         Query query = entityManager.createQuery("select u from User u where username=:username");
@@ -195,7 +196,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     private void blockUnblockUser(Long id, boolean status) {
-        EntityManager manager = dbService.getEntityManagerFactory().createEntityManager();
+        EntityManager manager = entityManagerFactory.createEntityManager();
         manager.getTransaction().begin();
 
         manager.createQuery("update User u set u.blocked=:status where u.id=:id")

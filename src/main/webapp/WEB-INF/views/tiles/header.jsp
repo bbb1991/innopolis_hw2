@@ -1,8 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<%@ page contentType="text/html; charset=utf-8"%>
+
 <head>
-    <title>${title} | e-library</title>
+    <title>Title</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,14 +24,5 @@
             crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
 
-    <style>
-        body {
-            padding-top: 20px;
-            padding-bottom: 20px;
-        }
-
-        .navbar {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="${pageContext.request.contextPath}/resources/css/navbar.css" rel="stylesheet"/>
 </head>

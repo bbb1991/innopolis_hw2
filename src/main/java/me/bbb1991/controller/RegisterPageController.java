@@ -40,7 +40,7 @@ public class RegisterPageController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
 
-        userService.saveOrUpdate(userForm);
+        userService.saveOrUpdateUser(userForm);
 
         securityService.autoLogin(userForm.getUsername(), userForm.getConfirmPassword());
 

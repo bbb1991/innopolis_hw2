@@ -1,7 +1,7 @@
 package me.bbb1991.controller;
 
 import me.bbb1991.model.Book;
-import me.bbb1991.service.DBService;
+import me.bbb1991.service.BookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class MainPageServlet {
     /**
      * Сервис для работы с БД
      */
-    private DBService dbService;
+    private BookService bookService;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getPage(Model model) {
 
         logger.info("Incoming request for get index page");
 
-        List<Book> books = dbService.getAllBooks();
+        List<Book> books = bookService.getAllBooks();
 
         model.addAttribute("title", "Главная страница");
         model.addAttribute("books", books);
@@ -49,7 +49,7 @@ public class MainPageServlet {
 
     @RequestMapping(value = "/books", method = RequestMethod.GET)
     public String getBooks(@RequestParam("by_author") String username, Model model) {
-        List<Book> books = dbService.getBooksByAuthor(username);
+        List<Book> books = bookService.getBooksByAuthor(username);
 
         model.addAttribute("title", "Главная страница");
         model.addAttribute("books", books);
@@ -58,7 +58,7 @@ public class MainPageServlet {
     }
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 }

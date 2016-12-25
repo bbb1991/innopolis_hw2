@@ -2,6 +2,8 @@ package me.bbb1991.service;
 
 import me.bbb1991.model.User;
 
+import java.util.List;
+
 /**
  * Created by bbb1991 on 12/9/16.
  *
@@ -15,7 +17,7 @@ public interface UserService {
      *
      * @param user пользователь
      */
-    void saveOrUpdate(User user);
+    void saveOrUpdateUser(User user);
 
     /**
      * Поиск пользователя по логину
@@ -32,5 +34,11 @@ public interface UserService {
      * @return пользователь, найденный по ID, или <code>null</code>
      */
     User getUserById(Long id);
+
+    void unblockUserById(Long id);
+
+    List<User> getAllUsers();
+
+    void blockUserById(Long id);
 
 }

@@ -4,14 +4,13 @@ import me.bbb1991.helpers.CustomException;
 import me.bbb1991.helpers.Helper;
 import me.bbb1991.model.Book;
 import me.bbb1991.model.User;
-import me.bbb1991.service.DBService;
+import me.bbb1991.service.BookService;
+import me.bbb1991.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +40,9 @@ public class DashboardPageServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(DashboardPageServlet.class);
 
-    private DBService dbService;
+    private BookService bookService;
+
+    private UserService userService;
 
     private Helper helper;
 
@@ -53,7 +54,7 @@ public class DashboardPageServlet {
 
         User user = helper.getCurrentUser();
 
-        List<Book> books = dbService.getBooksByAuthor(user.getUsername());
+        List<Book> books = bookService.getBooksByAuthor(user.getUsername());
 
 
         model.addAttribute("user", user);
@@ -90,7 +91,7 @@ public class DashboardPageServlet {
 
         user.setPassword(helper.getPasswordHash(password));
 
-        dbService.saveOrUpdate(user);
+        userService.saveOrUpdateUser(user);
 
         return "redirect:/dashboard";
     }
@@ -136,18 +137,23 @@ public class DashboardPageServlet {
 
         user.setAvatar("avatars" + File.separator + multipartFile.getOriginalFilename());
 
-        dbService.saveOrUpdate(user);
+        userService.saveOrUpdateUser(user);
 
         return "redirect:/dashboard";
     }
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @Autowired
     public void setHelper(Helper helper) {
         this.helper = helper;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

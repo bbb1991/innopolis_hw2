@@ -5,7 +5,8 @@ import me.bbb1991.helpers.Helper;
 import me.bbb1991.model.Book;
 import me.bbb1991.model.Comment;
 import me.bbb1991.model.User;
-import me.bbb1991.service.DBService;
+import me.bbb1991.service.BookService;
+import me.bbb1991.service.CommentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 
@@ -32,7 +32,9 @@ public class ViewBookPageController {
     /**
      * Сервис для работы с БД
      */
-    private DBService dbService;
+    private BookService bookService;
+
+    private CommentService commentService;
 
     private Helper helper;
 
@@ -48,13 +50,13 @@ public class ViewBookPageController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(value = "/book/{id}", method = RequestMethod.GET)
     public String getBook(@PathVariable("id") Long id, Model model) {
-        Book book = dbService.getBookById(id);
+        Book book = bookService.getBookById(id);
 
         if (book == null) {
             throw new CustomException(HttpStatus.NOT_FOUND, String.format("No book found with ID: %d", id));
         }
 
-        List<Comment> comments = dbService.getCommentsByBookId(book.getId());
+        List<Comment> comments = commentService.getCommentsByBookId(book.getId());
 
         model.addAttribute("title", book.getTitle());
         model.addAttribute("book", book);
@@ -73,14 +75,14 @@ public class ViewBookPageController {
 
         logger.info("User is: {}", user);
 
-        Book book = dbService.getBookById(id);
+        Book book = bookService.getBookById(id);
 
         logger.info("Book is: {}" , book);
 
 
         comment.setUser(user);
         comment.setBook(book);
-        dbService.saveOrUpdateComment(comment);
+        commentService.saveOrUpdateComment(comment);
 
         logger.info("Comment added.");
 
@@ -88,8 +90,13 @@ public class ViewBookPageController {
     }
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Autowired
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
     }
 
     @Autowired

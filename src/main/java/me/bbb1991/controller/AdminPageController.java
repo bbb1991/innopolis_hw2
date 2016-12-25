@@ -1,7 +1,7 @@
 package me.bbb1991.controller;
 
 import me.bbb1991.model.User;
-import me.bbb1991.service.DBService;
+import me.bbb1991.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class AdminPageController {
      */
     private static final Logger logger = LoggerFactory.getLogger(AdminPageController.class);
 
-    private DBService dbService;
+    private UserService userService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String getPage(Model model) {
@@ -40,7 +39,7 @@ public class AdminPageController {
 
         // TODO: 12/10/16 add logic here
 
-        List<User> users = dbService.getAllUsers();
+        List<User> users = userService.getAllUsers();
 
         users.sort(Comparator.comparing(User::getId));
 
@@ -61,7 +60,7 @@ public class AdminPageController {
 
         logger.info("Blocking user by ID: {}", id);
 
-        dbService.blockUserById(id);
+        userService.blockUserById(id);
 
         return "redirect:/admin";
     }
@@ -77,13 +76,14 @@ public class AdminPageController {
 
         logger.info("Unblocking user by ID: {}", id);
 
-        dbService.unblockUserById(id);
+        userService.unblockUserById(id);
 
         return "redirect:/admin";
     }
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }

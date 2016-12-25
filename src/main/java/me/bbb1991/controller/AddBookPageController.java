@@ -1,8 +1,8 @@
 package me.bbb1991.controller;
 
 import me.bbb1991.model.Book;
+import me.bbb1991.service.BookService;
 import me.bbb1991.service.CustomUserDetail;
-import me.bbb1991.service.DBService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,8 @@ public class AddBookPageController {
      */
     private static final Logger logger = LoggerFactory.getLogger(AddBookPageController.class);
 
-    /**
-     * Сервис по работе с БД
-     */
-    private DBService dbService;
+
+    private BookService bookService;
 
     /**
      * Метод для получения страницы с формой
@@ -75,7 +73,7 @@ public class AddBookPageController {
         book.setAuthor(customUser.getUser());
         book.setDate(new Date());
 
-        Long bookId = dbService.saveOrUpdateBook(book);
+        Long bookId = bookService.saveOrUpdateBook(book);
 
         // перенаправляем
         return String.format("redirect:/book/%d", bookId);
@@ -87,7 +85,7 @@ public class AddBookPageController {
 
         logger.info("Incoming request for edit book by ID: {}", id);
 
-        Book book = dbService.getBookById(id);
+        Book book = bookService.getBookById(id);
 
         model.addAttribute("title", "Редактирование: " + book.getTitle());
         model.addAttribute("book", book);
@@ -101,13 +99,13 @@ public class AddBookPageController {
 
         // TODO: 12/16/16 check user permission
 
-        dbService.deleteBookById(id);
+        bookService.deleteBookById(id);
 
         return "redirect:/dashboard";
     }
 
     @Autowired
-    public void setDbService(DBService dbService) {
-        this.dbService = dbService;
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
     }
 }

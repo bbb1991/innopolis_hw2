@@ -2,6 +2,7 @@ package me.bbb1991.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by bbb1991 on 12/8/16.
@@ -50,6 +51,9 @@ public class Book {
      */
     @Column
     private boolean draft;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Comment> comments;
 
     public Book() {
     }
@@ -100,6 +104,14 @@ public class Book {
 
     public void setDraft(boolean draft) {
         this.draft = draft;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override

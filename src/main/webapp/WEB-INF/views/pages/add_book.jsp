@@ -1,6 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ page contentType="text/html; charset=utf-8"%>
+<%@ page contentType="text/html; charset=utf-8" %>
 <div>
     <form:form method="POST" modelAttribute="book" action="${pageContext.request.contextPath}/add_book">
         <%--@elvariable id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"--%>
@@ -18,6 +18,10 @@
                 <form:textarea path="content" placeholder="content" required="true" class="form-control"/>
                 <form:errors path="content"/>
             </div>
+        </spring:bind>
+
+        <spring:bind path="draft">
+            <form:checkbox path="draft" class="form-control"/>
         </spring:bind>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <button class="btn btn-lg btn-success btn-block" type="submit">Submit</button>

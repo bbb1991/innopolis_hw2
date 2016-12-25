@@ -1,10 +1,12 @@
 package me.bbb1991.service;
 
 import me.bbb1991.dao.BookDAO;
+import me.bbb1991.dao.CommentDAO;
 import me.bbb1991.dao.RoleDAO;
 import me.bbb1991.dao.UserDAO;
 import me.bbb1991.helpers.Helper;
 import me.bbb1991.model.Book;
+import me.bbb1991.model.Comment;
 import me.bbb1991.model.Role;
 import me.bbb1991.model.User;
 import org.slf4j.Logger;
@@ -29,9 +31,10 @@ import java.util.Set;
  */
 
 @Service
+@Deprecated
 public class DBService implements UserService, BookService {
 
-    // TODO: 12/9/16 Separate to UserService and BookService
+    // TODO: 12/9/16 Separate logics to own services
 
     /**
      * Логгер уровня класса
@@ -53,6 +56,8 @@ public class DBService implements UserService, BookService {
      */
     private RoleDAO roleDAO;
 
+    private CommentDAO commentDAO;
+
     private Helper helper;
 
     @Autowired
@@ -73,6 +78,11 @@ public class DBService implements UserService, BookService {
     @Autowired
     public void setHelper(Helper helper) {
         this.helper = helper;
+    }
+
+    @Autowired
+    public void setCommentDAO(CommentDAO commentDAO) {
+        this.commentDAO = commentDAO;
     }
 
     /**
@@ -193,5 +203,13 @@ public class DBService implements UserService, BookService {
     @Override
     public List<Book> getBooksByAuthor(String username) {
         return bookDAO.findByUsername(username);
+    }
+
+    public List<Comment> getCommentsByBookId(Long id) {
+        return commentDAO.getByBook_Id(id);
+    }
+
+    public void saveOrUpdateComment(Comment comment) {
+        commentDAO.save(comment);
     }
 }

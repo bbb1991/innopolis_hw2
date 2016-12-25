@@ -17,7 +17,9 @@
         <!-- Страница для администраторов -->
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
 
-        <intercept-url pattern="/dashboard" access="isAuthenticated()"/>
+        <intercept-url pattern="/dashboard/**" access="isAuthenticated()"/>
+
+        <intercept-url pattern="/book/**" access="isAuthenticated()"/>
 
         <form-login login-page="/login" default-target-url="/dashboard" authentication-failure-url="/login?error"
                     username-parameter="username" password-parameter="password"/>
@@ -26,12 +28,12 @@
     </http>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider user-service-ref="userDetailsServiceImpl">
+        <authentication-provider user-service-ref="userDetailsService">
             <password-encoder ref="encoder"/>
         </authentication-provider>
     </authentication-manager>
 
-    <beans:bean id="userDetailsServiceImpl" class="me.bbb1991.service.CustomUserDetailService"/>
+    <beans:bean id="userDetailsService" class="me.bbb1991.service.CustomUserDetailService"/>
 
     <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
         <beans:constructor-arg name="strength" value="11"/>
